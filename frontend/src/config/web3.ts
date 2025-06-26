@@ -2,6 +2,7 @@ import { createConfig, http } from 'wagmi'
 import { defineChain } from 'viem'
 import { injected, metaMask } from 'wagmi/connectors'
 
+
 // Configuration de la chaîne Monad Testnet
 export const monadTestnet = defineChain({
     id: 10143,
@@ -23,7 +24,8 @@ export const monadTestnet = defineChain({
         },
     },
     testnet: true,
-})
+});
+
 
 // Configuration Wagmi
 export const config = createConfig({
@@ -35,7 +37,8 @@ export const config = createConfig({
     transports: {
         [monadTestnet.id]: http(),
     },
-})
+});
+
 
 // Adresses des contrats déployés sur Monad Testnet
 export const CONTRACT_ADDRESSES = {
@@ -43,7 +46,8 @@ export const CONTRACT_ADDRESSES = {
     WeaponNFT: '0xC10a2805C1610d81eA3037B041b6669CB4944251',
     ArtifactNFT: '0xbe7E187734C30F11e7E7D3bc00D84F27CFD0e345',
     BattleArena: '0xD6b48e9f3e7a3e233ECD3E1a493de5e9A764B80C',
-} as const
+} as const;
+
 
 // ABIs simplifiés pour l'interface
 export const MONANIMAL_ABI = [
@@ -160,7 +164,8 @@ export const MONANIMAL_ABI = [
         "stateMutability": "view",
         "type": "function"
     }
-] as const
+] as const;
+
 
 export const WEAPON_ABI = [
     {
@@ -205,7 +210,8 @@ export const WEAPON_ABI = [
         "stateMutability": "view",
         "type": "function"
     }
-] as const
+] as const;
+
 
 export const ARTIFACT_ABI = [
     {
@@ -250,7 +256,8 @@ export const ARTIFACT_ABI = [
         "stateMutability": "view",
         "type": "function"
     }
-] as const
+] as const;
+
 
 export const BATTLE_ARENA_ABI = [
     {
@@ -306,4 +313,4 @@ export const BATTLE_ARENA_ABI = [
         "stateMutability": "view",
         "type": "function"
     }
-] as const
+] as const;

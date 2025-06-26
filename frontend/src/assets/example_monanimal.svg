@@ -1,0 +1,103 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <!-- Gradients Monad -->
+    <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#836EF9"/>
+      <stop offset="100%" stop-color="#200052"/>
+    </linearGradient>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#836EF9" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#200052" stop-opacity="0.1"/>
+    </radialGradient>
+    
+    <!-- Effets de rareté -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Animations -->
+    <animate id="pulse" attributeName="opacity" values="0.9;1;0.9" dur="4s" repeatCount="indefinite"/>
+  </defs>
+  
+  <!-- Arrière-plan -->
+  <rect width="400" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Éléments d'arrière-plan animés -->
+  <circle cx="80" cy="80" r="3" fill="#836EF9" opacity="0.6">
+    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="320" cy="120" r="2" fill="#A0055D" opacity="0.5">
+    <animate attributeName="opacity" values="0.2;0.7;0.2" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="350" cy="300" r="4" fill="#836EF9" opacity="0.4">
+    <animate attributeName="opacity" values="0.1;0.6;0.1" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Corps du Monanimal (Mage) -->
+  <g filter="url(#glow)">
+    <circle cx="200" cy="210" r="65" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>
+    <circle cx="200" cy="190" r="60" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>
+  </g>
+  
+  <!-- Visage -->
+  <!-- Yeux -->
+  <circle cx="175" cy="170" r="15" fill="#FFFFFF" stroke="#0E100F" stroke-width="2">
+    <animate attributeName="r" values="15;17;15" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="175" cy="170" r="10" fill="#0E100F"/>
+  <circle cx="177" cy="167" r="3" fill="#FFFFFF"/>
+  
+  <circle cx="225" cy="170" r="15" fill="#FFFFFF" stroke="#0E100F" stroke-width="2">
+    <animate attributeName="r" values="15;17;15" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="225" cy="170" r="10" fill="#0E100F"/>
+  <circle cx="227" cy="167" r="3" fill="#FFFFFF"/>
+  
+  <!-- Nez -->
+  <ellipse cx="195" cy="185" rx="2" ry="1" fill="#0E100F"/>
+  <ellipse cx="205" cy="185" rx="2" ry="1" fill="#0E100F"/>
+  
+  <!-- Bouche -->
+  <path d="M 180 200 Q 200 190 220 200" stroke="#0E100F" stroke-width="2" fill="none"/>
+  
+  <!-- Accessoires de classe (Mage) -->
+  <polygon points="200,100 180,140 220,140" fill="#836EF9" stroke="#0E100F" stroke-width="2"/>
+  <circle cx="190" cy="130" r="3" fill="#FFD700"/>
+  <circle cx="210" cy="130" r="3" fill="#FFD700"/>
+  <circle cx="200" cy="120" r="3" fill="#FFD700"/>
+  
+  <!-- Effets de rareté (Legendary) -->
+  <circle cx="200" cy="200" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3">
+    <animate attributeName="r" values="75;85;75" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Pattes -->
+  <ellipse cx="160" cy="280" rx="15" ry="25" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  <ellipse cx="240" cy="280" rx="15" ry="25" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  
+  <!-- Pieds -->
+  <ellipse cx="160" cy="305" rx="20" ry="10" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  <ellipse cx="240" cy="305" rx="20" ry="10" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  
+  <!-- Bras -->
+  <ellipse cx="140" cy="220" rx="12" ry="30" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  <ellipse cx="260" cy="220" rx="12" ry="30" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  
+  <!-- Mains -->
+  <circle cx="140" cy="250" r="12" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  <circle cx="260" cy="250" r="12" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="2"/>
+  
+  <!-- Panneau d'informations -->
+  <rect x="10" y="320" width="380" height="70" fill="#0E100F" fill-opacity="0.8" rx="5"/>
+  <text x="20" y="340" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Legendary Mage #1</text>
+  <text x="20" y="355" fill="#836EF9" font-family="Arial, sans-serif" font-size="10">Level 1 | Mage | Legendary</text>
+  <text x="20" y="370" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9">HP:140 ATK:90 DEF:90</text>
+  <text x="20" y="382" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9">SPD:92 MAG:140 LCK:91</text>
+  <text x="280" y="370" fill="#A0055D" font-family="Arial, sans-serif" font-size="9">Wins: 0</text>
+  <text x="280" y="382" fill="#A0055D" font-family="Arial, sans-serif" font-size="9">Losses: 0</text>
+</svg>
+

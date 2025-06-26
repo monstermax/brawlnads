@@ -1,0 +1,25 @@
+{
+  "contracts": {
+    "MonanimalNFT": {
+      "address": "0x45df6a3644BD73c94207d53cf49d0Bae2fd0eFde",
+      "abi": "MonanimalNFT"
+    },
+    "WeaponNFT": {
+      "address": "0xC10a2805C1610d81eA3037B041b6669CB4944251",
+      "abi": "WeaponNFT"
+    },
+    "ArtifactNFT": {
+      "address": "0xbe7E187734C30F11e7E7D3bc00D84F27CFD0e345",
+      "abi": "ArtifactNFT"
+    },
+    "BattleArena": {
+      "address": "0xD6b48e9f3e7a3e233ECD3E1a493de5e9A764B80C",
+      "abi": "BattleArena"
+    }
+  },
+  "network": {
+    "name": "monad_testnet",
+    "chainId": 10143,
+    "rpcUrl": "https://testnet-rpc.monad.xyz"
+  }
+}

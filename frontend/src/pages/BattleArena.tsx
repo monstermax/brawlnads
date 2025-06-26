@@ -12,13 +12,21 @@ import type { Monanimal } from '../types'
 const BattleArena: React.FC = () => {
   const { isConnected } = useWallet()
   const { monanimals, loading } = useMonanimals()
-  const { startBattle, battleResult, isLoading: isBattling } = useBattles(monanimals)
+  const { startBattle, battleResult, isLoading: isBattling, clearResult } = useBattles(monanimals)
   
   const [showFighterSelector, setShowFighterSelector] = useState(false)
   const [showOpponentSelector, setShowOpponentSelector] = useState(false)
   const [selectedFighter, setSelectedFighter] = useState<Monanimal | null>(null)
   const [selectedOpponent, setSelectedOpponent] = useState<Monanimal | null>(null)
   const [showBattleResult, setShowBattleResult] = useState(false)
+
+  // Afficher automatiquement le résultat quand il est disponible
+  React.useEffect(() => {
+    if (battleResult) {
+      console.log('🎯 Battle result received, showing modal:', battleResult)
+      setShowBattleResult(true)
+    }
+  }, [battleResult])
 
   const handleStartBattle = () => {
     if (monanimals.length === 0) {
@@ -50,9 +58,6 @@ const BattleArena: React.FC = () => {
     
     // Démarrer la bataille de manière asynchrone
     startBattle(selectedFighter.id, selectedOpponent.id)
-      .then(() => {
-        setShowBattleResult(true)
-      })
       .catch((error) => {
         console.error('Battle failed:', error)
         alert('Battle failed. Please try again.')
@@ -62,6 +67,8 @@ const BattleArena: React.FC = () => {
   const handleCloseBattleResult = () => {
     setShowBattleResult(false)
     setSelectedFighter(null)
+    setSelectedOpponent(null)
+    clearResult() // Nettoyer le résultat de bataille
   }
 
   const handleCloseFighterSelector = () => {

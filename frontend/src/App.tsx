@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 import { config } from './config/web3'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
@@ -9,9 +10,12 @@ import Collection from './pages/Collection'
 import BattleArena from './pages/BattleArena'
 import Leaderboard from './pages/Leaderboard'
 import Forge from './pages/Forge'
+
 import './App.css'
 
+
 const queryClient = new QueryClient()
+
 
 const App: React.FC = () => {
   return (

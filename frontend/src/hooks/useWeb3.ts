@@ -100,7 +100,7 @@ export function useMonanimals() {
         }
 
         if (finalTokenIds.length > 0) {
-          const monanimalPromises = finalTokenIds.map(async (tokenId) => {
+          const monanimalPromises = finalTokenIds.map(async (tokenId: number) => {
             try {
               const classes = ['Warrior', 'Assassin', 'Mage', 'Berserker', 'Guardian']
               const rarities = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic']
@@ -229,7 +229,7 @@ export function useWeapons() {
   useEffect(() => {
     if (tokenIds && tokenIds.length > 0) {
       Promise.all(
-        tokenIds.map(async (tokenId) => {
+        tokenIds.map(async (tokenId: number) => {
           try {
             return {
               id: Number(tokenId),
@@ -299,7 +299,7 @@ export function useArtifacts() {
   useEffect(() => {
     if (tokenIds && tokenIds.length > 0) {
       Promise.all(
-        tokenIds.map(async (tokenId) => {
+        tokenIds.map(async (tokenId: number) => {
           try {
             return {
               id: Number(tokenId),
@@ -334,7 +334,7 @@ export function useArtifacts() {
 export function useBattles() {
   const { address } = useAccount()
   const [battleInProgress, setBattleInProgress] = useState(false)
-  const [battleResult, setBattleResult] = useState(null)
+  const [battleResult, setBattleResult] = useState<null | { won: boolean | null, experience: number, message: string }>(null)
 
   // Lire le prix du duel
   const { data: duelFee } = useReadContract({
@@ -371,7 +371,7 @@ export function useBattles() {
     enabled: !!address,
   })
 
-  const startDuel = (monanimalId, opponentId) => {
+  const startDuel = (monanimalId: number, opponentId: number) => {
     console.log('=== startDuel called ===')
     console.log('monanimalId:', monanimalId)
     console.log('opponentId:', opponentId)
@@ -419,6 +419,7 @@ export function useBattles() {
         functionName: 'createDuel',
         args: [BigInt(monanimalId), BigInt(opponentId)],
         value: duelFee,
+        gas: BigInt(1_500_000), // Limite de gas plus élevée pour éviter les "out of gas"
       })
 
       console.log('✅ createDuel function called successfully')
@@ -434,7 +435,7 @@ export function useBattles() {
       // Le duel a été créé et exécuté automatiquement sur la blockchain
       // Les résultats sont maintenant disponibles via refetchBattles()
       setBattleResult({
-        won: null, // Le résultat sera lu depuis la blockchain
+        won: null as boolean | null, // Le résultat sera lu depuis la blockchain
         experience: 0,
         message: 'Duel completed on blockchain! Check leaderboard for results.',
       })
@@ -472,7 +473,7 @@ export function useGameStats() {
     totalMonanimals: 0,
     totalBattles: 0,
     totalPlayers: 0,
-    topFighter: null,
+    topFighter: null as string | null,
   })
 
   useEffect(() => {

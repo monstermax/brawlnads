@@ -151,7 +151,9 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
                       <div className="col-6">
                         <div className="text-center">
                           <i className="fas fa-trophy text-warning fa-2x mb-2"></i>
-                          <div className="text-white">Victory</div>
+                          <div className="text-white">
+                            {won === true ? 'Victory' : won === false ? 'Defeat' : 'Battle Completed'}
+                          </div>
                         </div>
                       </div>
                     </div>

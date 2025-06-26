@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+
 import { useWallet } from '../hooks/useWallet'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
+
 
 const Navbar: React.FC = () => {
   const { isConnected, address, connect, disconnect } = useWallet()
@@ -17,18 +19,18 @@ const Navbar: React.FC = () => {
           <i className="fas fa-dragon me-2 text-primary"></i>
           BrawlNads
         </Link>
-        
+
         {/* Navigation toujours visible */}
         <div className="navbar-nav me-auto d-flex flex-row">
-          <Link 
-            className={`nav-link me-3 ${isActive('/') ? 'active text-primary' : 'text-light'}`} 
+          <Link
+            className={`nav-link me-3 ${isActive('/') ? 'active text-primary' : 'text-light'}`}
             to="/"
           >
             <i className="fas fa-home me-1"></i>
             Home
           </Link>
-          <Link 
-            className={`nav-link me-3 ${isActive('/collection') ? 'active text-primary' : 'text-light'}`} 
+          <Link
+            className={`nav-link me-3 ${isActive('/collection') ? 'active text-primary' : 'text-light'}`}
             to="/collection"
           >
             <i className="fas fa-dragon me-1"></i>
@@ -56,7 +58,7 @@ const Navbar: React.FC = () => {
             Forge
           </Link>
         </div>
-        
+
         <div className="d-flex align-items-center">
           <Badge variant="info" className="me-3">
             <i className="fas fa-network-wired me-1"></i>
@@ -68,8 +70,8 @@ const Navbar: React.FC = () => {
                 <i className="fas fa-wallet me-1"></i>
                 {address?.slice(0, 6)}...{address?.slice(-4)}
               </Badge>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={disconnect}
               >
@@ -78,8 +80,8 @@ const Navbar: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               size="sm"
               onClick={connect}
             >

@@ -371,14 +371,13 @@ export function useBattles() {
     enabled: !!address,
   })
 
-  const startDuel = (monanimalId, opponentId, testMode = false) => {
+  const startDuel = (monanimalId, opponentId) => {
     console.log('=== startDuel called ===')
     console.log('monanimalId:', monanimalId)
     console.log('opponentId:', opponentId)
     console.log('duelFee:', duelFee)
     console.log('duelFee formatted:', duelFee ? formatEther(duelFee) : 'null')
     console.log('address:', address)
-    console.log('testMode:', testMode)
     console.log('CONTRACT_ADDRESSES.BattleArena:', CONTRACT_ADDRESSES.BattleArena)
     
     if (monanimalId === undefined || monanimalId === null) {
@@ -391,23 +390,9 @@ export function useBattles() {
       return
     }
 
-    // Mode test : simuler une bataille sans blockchain
-    if (testMode || !address) {
-      console.log('🎮 Test mode: Simulating battle...')
-      setBattleInProgress(true)
-
-      // Simuler une bataille avec un délai
-      setTimeout(() => {
-        const winner = Math.random() > 0.5
-        setBattleResult({
-          won: winner,
-          experience: Math.floor(Math.random() * 100) + 50,
-          message: winner ? 'Victory! Your Monanimal won the duel!' : 'Defeat! Better luck next time!',
-        })
-        setBattleInProgress(false)
-        console.log('🎮 Simulated battle completed:', winner ? 'Victory' : 'Defeat')
-      }, 3000) // 3 secondes de simulation
-
+    // Plus de mode test - uniquement blockchain
+    if (!address) {
+      console.error('❌ Wallet not connected')
       return
     }
 
@@ -446,14 +431,15 @@ export function useBattles() {
   // Écouter la confirmation du duel
   useEffect(() => {
     if (isDuelConfirmed) {
-      // Le duel a été créé et exécuté automatiquement
+      // Le duel a été créé et exécuté automatiquement sur la blockchain
+      // Les résultats sont maintenant disponibles via refetchBattles()
       setBattleResult({
-        won: true, // Pour l'instant, on assume une victoire
-        experience: 100,
-        message: 'Duel completed on blockchain!',
+        won: null, // Le résultat sera lu depuis la blockchain
+        experience: 0,
+        message: 'Duel completed on blockchain! Check leaderboard for results.',
       })
       setBattleInProgress(false)
-      refetchBattles() // Recharger les batailles
+      refetchBattles() // Recharger les batailles pour obtenir les vrais résultats
     }
   }, [isDuelConfirmed, refetchBattles])
 

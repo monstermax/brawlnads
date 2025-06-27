@@ -146,14 +146,10 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
                         console.log('  Opponent ID:', opponentId)
                         console.log('  Did I win?', didIWin)
 
-                        // Récupérer les vraies données des Monanimals
-                        const myData = await refetchMyMonanimal()
-                        const opponentData = await refetchOpponentMonanimal()
-
                         // Fonction pour extraire l'image SVG du tokenURI
                         const extractSVGFromTokenURI = (tokenURI: string) => {
                             try {
-                                if (tokenURI.startsWith('data:application/json;base64,')) {
+                                if (tokenURI && tokenURI.startsWith('data:application/json;base64,')) {
                                     const base64Data = tokenURI.replace('data:application/json;base64,', '')
                                     const jsonData = JSON.parse(atob(base64Data))
                                     return jsonData.image || null
@@ -164,27 +160,46 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
                             return null
                         }
 
+                        // Récupérer les vraies données des Monanimals
+                        console.log('📖 Fetching Monanimal data...')
+                        const myData = await refetchMyMonanimal()
+                        const opponentData = await refetchOpponentMonanimal()
+                        
+                        console.log('📊 My Monanimal data:', myData.data)
+                        console.log('📊 Opponent Monanimal data:', opponentData.data)
+                        console.log('🖼️ My TokenURI:', myTokenURI)
+                        console.log('🖼️ Opponent TokenURI:', opponentTokenURI)
+
                         // Transformer les données du contrat en format Monanimal avec SVG
-                        const transformContractToMonanimal = (contractData: any, id: number, tokenURI?: string): Monanimal => ({
-                            id,
-                            name: contractData?.name || `Monanimal #${id}`,
-                            class: contractData?.class?.toString() || 'Fighter',
-                            rarity: contractData?.rarity?.toString() || 'Common',
-                            level: Number(contractData?.level || 1),
-                            health: Number(contractData?.stats?.health || 100),
-                            attack: Number(contractData?.stats?.attack || 50),
-                            defense: Number(contractData?.stats?.defense || 30),
-                            speed: Number(contractData?.stats?.speed || 40),
-                            magic: Number(contractData?.stats?.magic || 20),
-                            luck: Number(contractData?.stats?.luck || 10),
-                            wins: Number(contractData?.wins || 0),
-                            losses: Number(contractData?.losses || 0),
-                            isKO: contractData?.isKO || false,
-                            image: tokenURI ? extractSVGFromTokenURI(tokenURI) : undefined,
-                        })
+                        const transformContractToMonanimal = (contractData: any, id: number, tokenURI?: string): Monanimal => {
+                            const image = tokenURI ? extractSVGFromTokenURI(tokenURI) : null
+                            console.log(`🎨 Extracted image for Monanimal #${id}:`, image ? 'SVG found' : 'No SVG')
+                            
+                            return {
+                                id,
+                                name: contractData?.name || `Monanimal #${id}`,
+                                class: contractData?.class?.toString() || 'Fighter',
+                                rarity: contractData?.rarity?.toString() || 'Common',
+                                level: Number(contractData?.level || 1),
+                                health: Number(contractData?.stats?.health || 100),
+                                attack: Number(contractData?.stats?.attack || 50),
+                                defense: Number(contractData?.stats?.defense || 30),
+                                speed: Number(contractData?.stats?.speed || 40),
+                                magic: Number(contractData?.stats?.magic || 20),
+                                luck: Number(contractData?.stats?.luck || 10),
+                                wins: Number(contractData?.wins || 0),
+                                losses: Number(contractData?.losses || 0),
+                                isKO: contractData?.isKO || false,
+                                image: image,
+                            }
+                        }
 
                         const myMonanimal = transformContractToMonanimal(myData.data, myMonanimalId, myTokenURI as string)
                         const opponentMonanimal = transformContractToMonanimal(opponentData.data, opponentId, opponentTokenURI as string)
+                        
+                        console.log('🏆 Final Monanimal objects:')
+                        console.log('  My Monanimal:', myMonanimal)
+                        console.log('  Opponent Monanimal:', opponentMonanimal)
 
                         if (didIWin) {
                             console.log('✅ Victory!')

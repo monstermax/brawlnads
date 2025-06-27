@@ -29,15 +29,16 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
       borderColor: isWinner ? '#ffd700' : isLoser ? '#6c757d' : 'rgba(108, 117, 125, 0.5)',
       borderWidth: isWinner ? '3px' : '1px',
       opacity: isLoser ? 0.6 : 1,
-      transform: isWinner ? 'scale(1.05)' : isLoser ? 'scale(0.95)' : 'scale(1)',
+      transform: isWinner ? 'scale(1.02)' : isLoser ? 'scale(0.98)' : 'scale(1)',
       transition: 'all 0.3s ease',
       boxShadow: isWinner
-        ? '0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4)'
+        ? '0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.3)'
         : isLoser
-        ? '0 0 10px rgba(0, 0, 0, 0.5)'
+        ? '0 0 5px rgba(0, 0, 0, 0.5)'
         : 'none',
       position: 'relative' as const,
-      margin: '20px',
+      margin: '10px',
+      maxWidth: '400px',
     }
 
     const overlayStyle = isWinner ? {
@@ -52,8 +53,8 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
     } : {}
 
     return (
-      <div className="col-md-6 mb-4 px-4">
-        <div className="card h-100" style={cardStyle}>
+      <div className="col-md-6 mb-3 px-2 d-flex justify-content-center">
+        <div className="card" style={cardStyle}>
           {isWinner && <div style={overlayStyle}></div>}
           
           {/* Crown for winner */}
@@ -101,121 +102,103 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
             </div>
           </div>
           
-          <div className="card-body p-4">
+          <div className="card-body p-2">
             {/* NFT Image avec SVG support */}
             <div
-              className="d-flex align-items-center justify-content-center mb-4"
+              className="d-flex align-items-center justify-content-center mb-2"
               style={{
-                height: '250px',
+                height: '150px',
                 backgroundColor: isLoser ? 'rgba(108, 117, 125, 0.1)' : 'rgba(108, 117, 125, 0.2)',
-                borderRadius: '0.5rem',
-                filter: isLoser ? 'grayscale(80%) brightness(0.5)' : 'none',
+                borderRadius: '0.375rem',
                 position: 'relative',
-                padding: '20px'
+                padding: '5px',
+                overflow: 'visible'
               }}
             >
               {monanimal.image ? (
-                monanimal.image.startsWith('data:image/svg+xml') ? (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: atob(monanimal.image.replace('data:image/svg+xml;base64,', ''))
-                    }}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      filter: isLoser ? 'grayscale(80%) brightness(0.5)' : 'none'
-                    }}
-                  />
-                ) : (
-                  <img
-                    src={monanimal.image}
-                    alt={monanimal.name}
-                    className="img-fluid"
-                    style={{
-                      maxHeight: '100%',
-                      maxWidth: '100%',
-                      filter: isLoser ? 'grayscale(80%) brightness(0.5)' : 'none'
-                    }}
-                  />
-                )
+                <div
+                  style={{
+                    width: '140px',
+                    height: '140px',
+                    backgroundImage: `url(${monanimal.image})`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    filter: isLoser ? 'grayscale(80%) brightness(0.5)' : 'none'
+                  }}
+                />
               ) : (
                 <div className={`text-center ${isLoser ? 'text-muted' : 'text-white'}`}>
                   <div
                     style={{
-                      fontSize: '5rem',
-                      filter: isWinner ? 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))' : 'none'
+                      fontSize: '3rem',
+                      filter: isWinner ? 'drop-shadow(0 0 15px rgba(255, 215, 0, 0.6))' : 'none'
                     }}
                   >
                     🐾
                   </div>
-                  <p className="small mb-0 mt-2">Monanimal #{monanimal.id}</p>
+                  <p className="small mb-0 mt-1">Monanimal #{monanimal.id}</p>
                 </div>
               )}
               
               {/* Winner glow effect */}
               {isWinner && (
-                <div 
+                <div
                   style={{
                     position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '120%',
-                    height: '120%',
-                    background: 'radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%)',
-                    borderRadius: '50%',
+                    top: '0',
+                    left: '0',
+                    right: '0',
+                    bottom: '0',
+                    background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
+                    borderRadius: '0.375rem',
                     animation: 'pulse 3s ease-in-out infinite',
-                    pointerEvents: 'none'
+                    pointerEvents: 'none',
+                    zIndex: 1
                   }}
                 ></div>
               )}
             </div>
-            
-            {/* Stats */}
-            <div className="row g-3 mb-4">
-              <div className="col-6">
-                <div className="d-flex align-items-center">
-                  <i className={`fas fa-heart text-danger me-1 ${isWinner ? 'fa-beat' : ''}`}></i>
-                  <small className={isLoser ? 'text-muted' : 'text-white'}>
-                    {monanimal.health || 100}
-                  </small>
+
+            {/* Monanimal Info Card - Compacte */}
+            <div
+              className="card"
+              style={{
+                backgroundColor: isLoser ? 'rgba(108, 117, 125, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+                border: `1px solid ${isWinner ? '#ffd700' : isLoser ? '#6c757d' : 'rgba(255, 255, 255, 0.2)'}`,
+                borderRadius: '0.25rem'
+              }}
+            >
+              <div className="card-body p-2">
+                <h6 className={`card-title mb-1 ${isLoser ? 'text-muted' : 'text-white'} text-center`} style={{ fontSize: '0.9rem' }}>
+                  {monanimal.name || `Monanimal #${monanimal.id}`}
+                </h6>
+                <p className="small text-muted mb-1 text-center" style={{ fontSize: '0.75rem' }}>
+                  Level {monanimal.level || 1} {monanimal.class || 'Fighter'} | {monanimal.rarity || 'Common'}
+                </p>
+                <div className="row g-1 text-center">
+                  <div className="col-6">
+                    <small className={`${isLoser ? 'text-muted' : 'text-light'}`} style={{ fontSize: '0.7rem' }}>
+                      HP: {monanimal.health || 100} | ATK: {monanimal.attack || 50}
+                    </small>
+                  </div>
+                  <div className="col-6">
+                    <small className={`${isLoser ? 'text-muted' : 'text-light'}`} style={{ fontSize: '0.7rem' }}>
+                      DEF: {monanimal.defense || 30} | SPD: {monanimal.speed || 40}
+                    </small>
+                  </div>
                 </div>
-              </div>
-              <div className="col-6">
-                <div className="d-flex align-items-center">
-                  <i className={`fas fa-sword text-warning me-1 ${isWinner ? 'fa-beat' : ''}`}></i>
-                  <small className={isLoser ? 'text-muted' : 'text-white'}>
-                    {monanimal.attack || 50}
+                <div className="d-flex justify-content-between mt-1">
+                  <small className={isLoser ? 'text-muted' : 'text-success'} style={{ fontSize: '0.7rem' }}>
+                    Wins: {monanimal.wins || 0}
                   </small>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="d-flex align-items-center">
-                  <i className={`fas fa-shield text-info me-1 ${isWinner ? 'fa-beat' : ''}`}></i>
-                  <small className={isLoser ? 'text-muted' : 'text-white'}>
-                    {monanimal.defense || 30}
-                  </small>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="d-flex align-items-center">
-                  <i className={`fas fa-bolt text-warning me-1 ${isWinner ? 'fa-beat' : ''}`}></i>
-                  <small className={isLoser ? 'text-muted' : 'text-white'}>
-                    {monanimal.speed || 40}
+                  <small className={isLoser ? 'text-muted' : 'text-danger'} style={{ fontSize: '0.7rem' }}>
+                    Losses: {monanimal.losses || 0}
                   </small>
                 </div>
               </div>
             </div>
             
-            {/* Win/Loss record */}
-            <div className="d-flex justify-content-between mt-3">
-              <small className={isLoser ? 'text-muted' : 'text-success'}>
-                Wins: {monanimal.wins || 0}
-              </small>
-              <small className={isLoser ? 'text-muted' : 'text-danger'}>
-                Losses: {monanimal.losses || 0}
-              </small>
-            </div>
           </div>
         </div>
       </div>

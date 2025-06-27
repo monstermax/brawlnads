@@ -56,10 +56,11 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
   if (availableOpponents.length === 0) {
     return (
       <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl p-6">
-        <h3 className="gaming-title text-xl mb-4">Aucun adversaire disponible</h3>
+        <h3 className="gaming-title text-xl mb-4">No opponents available</h3>
         <p className="text-gray-300">
-          Il n'y a actuellement aucun Monanimal disponible pour combattre.
-          Essayez de minter plus de Monanimals ou attendez que d'autres joueurs en créent.
+          There are currently no Monanimals available to fight.
+          <br />
+          Try mining more Monanimals or wait for other players to create some.
         </p>
       </div>
     )

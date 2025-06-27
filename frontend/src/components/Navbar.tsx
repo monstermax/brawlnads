@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
               <span className="text-xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 BRAWLNADS
               </span>
-              <span className="text-xs text-gray-400 font-mono -mt-1">MONAD EDITION</span>
+              <span className="text-xs text-gray-400 font-mono -mt-1">Saison 0: Monad Summer</span>
             </div>
           </Link>
 

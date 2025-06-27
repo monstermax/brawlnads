@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
+import { CONTRACT_ADDRESSES } from '../config/web3'
 import type { MonanimalCardProps } from '../types'
 
 const MonanimalCard: React.FC<MonanimalCardProps> = ({
@@ -9,6 +11,8 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
   isSelected = false,
   showActions = true,
 }) => {
+  const navigate = useNavigate()
+  const [showImageModal, setShowImageModal] = useState(false)
   const getRarityConfig = (rarity: string) => {
     switch (rarity) {
       case 'Mythic': 
@@ -84,6 +88,26 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
     }
   }
 
+  const handleEquip = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigate('/forge')
+  }
+
+  const handleBattle = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigate('/battle')
+  }
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowImageModal(true)
+  }
+
+  const getExplorerUrl = () => {
+    // URL de l'explorer Monad pour ce NFT
+    return `https://testnet.monvision.io/nft/${CONTRACT_ADDRESSES.MonanimalNFT}/${monanimal.id}`
+  }
+
   return (
     <div
       className={`
@@ -97,7 +121,7 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
       onClick={handleClick}
     >
       {/* Rarity Glow Effect */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${rarityConfig.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300`}></div>
+      <div className={`absolute inset-0 bg-gradient-to-br ${rarityConfig.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none -z-10`}></div>
       
       {/* Header */}
       <div className="relative p-4 border-b border-white/10">
@@ -130,13 +154,14 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
 
       {/* NFT Image */}
       <div className="relative p-4">
-        <div 
-          className="relative h-40 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl overflow-hidden border border-white/10"
+        <div
+          className="relative h-40 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl overflow-hidden border border-white/10 cursor-pointer hover:border-white/30 transition-all duration-300"
+          onClick={handleImageClick}
         >
           {monanimal.image ? (
-            <div 
-              className={`w-full h-full ${monanimal.isKO ? 'grayscale' : ''} transition-all duration-300`}
-              style={{ 
+            <div
+              className={`w-full h-full ${monanimal.isKO ? 'grayscale' : ''} transition-all duration-300 hover:scale-105`}
+              style={{
                 backgroundImage: `url(${monanimal.image})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
@@ -151,6 +176,13 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
               </div>
             </div>
           )}
+          
+          {/* Click indicator */}
+          <div className="absolute top-2 right-2 bg-black/50 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+            </svg>
+          </div>
           
           {/* KO Overlay */}
           {monanimal.isKO && (
@@ -197,30 +229,31 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
 
         {/* Action Buttons */}
         {showActions && (
-          <div className="space-y-2">
+          <div className="space-y-2 relative z-20">
             {monanimal.isKO ? (
-              <Button
+              <button
                 onClick={handleHeal}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-2 rounded-lg transition-all duration-300"
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-2 rounded-lg transition-all duration-300 px-4"
               >
                 <span className="mr-2">💚</span>
                 HEAL (0.005 ETH)
-              </Button>
+              </button>
             ) : (
               <div className="grid grid-cols-2 gap-2">
-                <Button
-                  variant="outline"
-                  className="border-purple-500/50 text-purple-300 text-enhanced hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300"
+                <button
+                  onClick={handleEquip}
+                  className="px-4 py-2 border border-purple-500/50 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 rounded-lg font-semibold"
                 >
                   <span className="mr-1">⚙️</span>
                   EQUIP
-                </Button>
-                <Button
-                  className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold transition-all duration-300"
+                </button>
+                <button
+                  onClick={handleBattle}
+                  className="px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold transition-all duration-300 rounded-lg"
                 >
                   <span className="mr-1">⚔️</span>
                   BATTLE
-                </Button>
+                </button>
               </div>
             )}
           </div>
@@ -237,7 +270,66 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
       )}
 
       {/* Hover Effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl -z-10"></div>
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-[#836EF9]/20">
+              <h3 className="gaming-title text-xl">{monanimal.name} #{monanimal.id}</h3>
+              <button
+                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
+                onClick={() => setShowImageModal(false)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Image */}
+            <div className="p-6">
+              <div className="aspect-square bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl overflow-hidden border border-white/10 mb-4">
+                {monanimal.image ? (
+                  <div
+                    className="w-full h-full"
+                    style={{
+                      backgroundImage: `url(${monanimal.image})`,
+                      backgroundSize: 'contain',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'center'
+                    }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-300">
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">🐾</div>
+                      <p>No image available</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Explorer Link */}
+              <div className="text-center">
+                <a
+                  href={getExplorerUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#836EF9] to-[#A0055D] hover:from-[#A0055D] hover:to-[#836EF9] text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  View on Explorer
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

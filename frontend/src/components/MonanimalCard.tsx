@@ -103,6 +103,9 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
     e.stopPropagation()
     if (!disableImageModal) {
       setShowImageModal(true)
+    } else if (onSelect) {
+      // Si la modal est désactivée et qu'on a une fonction onSelect, on sélectionne le fighter
+      onSelect(monanimal)
     }
   }
 
@@ -159,7 +162,7 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
       <div className="relative p-4">
         <div
           className={`relative h-40 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl overflow-hidden border border-white/10 transition-all duration-300 ${
-            disableImageModal ? 'cursor-default' : 'cursor-pointer hover:border-white/30'
+            disableImageModal && !onSelect ? 'cursor-default' : 'cursor-pointer hover:border-white/30'
           }`}
           onClick={handleImageClick}
         >

@@ -72,7 +72,7 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
       <p className="text-gray-300 mb-6">
         {availableOpponents.length} opponent{availableOpponents.length > 1 ? 's' : ''} available
       </p>
-      
+
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <button
           className="bg-gradient-to-r from-[#836EF9] to-[#A0055D] hover:from-[#A0055D] hover:to-[#836EF9] text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#836EF9]/25"
@@ -80,7 +80,7 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
         >
           🎲 Random Opponent
         </button>
-        
+
         {selectedOpponent && (
           <div className="bg-green-500/20 border border-green-500/30 text-green-400 px-4 py-2 rounded-lg">
             Selected Opponent: <span className="font-bold text-white">{selectedOpponent.name}</span>
@@ -112,7 +112,7 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
                 <span>Lvl {opponent.level}</span>
                 <span>{opponent.class}</span>
               </div>
-              
+
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-2 text-xs">
                 <div className="text-center">
@@ -134,11 +134,11 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
                   <div className="text-yellow-400">🍀 {opponent.luck}</div>
                 </div>
               </div>
-              
+
               {selectedOpponent?.id === opponent.id && (
                 <div className="mt-3">
                   <div className="bg-[#836EF9] text-white text-center py-1 rounded-lg text-sm font-semibold">
-                    Sélectionné
+                    Selected
                   </div>
                 </div>
               )}
@@ -150,7 +150,7 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
       {availableOpponents.length > 6 && (
         <div className="text-center mt-6">
           <p className="text-gray-400 text-sm">
-            Et {availableOpponents.length - 6} autre{availableOpponents.length - 6 > 1 ? 's' : ''} adversaire{availableOpponents.length - 6 > 1 ? 's' : ''}...
+            And {availableOpponents.length - 6} other{availableOpponents.length - 6 > 1 ? 's' : ''} opponent{availableOpponents.length - 6 > 1 ? 's' : ''}...
           </p>
         </div>
       )}

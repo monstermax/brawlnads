@@ -37,7 +37,31 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
         },
     })
 
-    // Hooks pour lire les stats des Monanimals participants
+    // Note: Hooks pour lire les stats supprimés car non nécessaires avec BattleArenaOptimized
+
+    // Debug logs pour les hooks de transaction
+    useEffect(() => {
+        console.log('=== Transaction Status ===')
+        console.log('duelHash:', duelHash)
+        console.log('isStarting:', isStarting)
+        console.log('isConfirming:', isConfirming)
+        console.log('isDuelConfirmed:', isDuelConfirmed)
+        console.log('duelError:', duelError)
+        console.log('confirmError:', confirmError)
+    }, [duelHash, isStarting, isConfirming, isDuelConfirmed, duelError, confirmError])
+
+    // Lire le résultat de la bataille depuis BattleArenaOptimized
+    const { data: playerBattlesData, refetch: refetchPlayerBattles } = useReadContract({
+        address: CONTRACT_ADDRESSES.BattleArena,
+        abi: BATTLE_ARENA_ABI,
+        functionName: 'getPlayerBattles',
+        args: [address!],
+        query: {
+            enabled: !!address && isDuelConfirmed,
+        },
+    })
+
+    // Hooks pour lire les vraies données des Monanimals
     const { data: myMonanimalData, refetch: refetchMyMonanimal } = useReadContract({
         address: CONTRACT_ADDRESSES.MonanimalNFT,
         abi: MONANIMAL_ABI,
@@ -58,180 +82,164 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
         },
     })
 
-    // Debug logs pour les hooks de transaction
-    useEffect(() => {
-        console.log('=== Transaction Status ===')
-        console.log('duelHash:', duelHash)
-        console.log('isStarting:', isStarting)
-        console.log('isConfirming:', isConfirming)
-        console.log('isDuelConfirmed:', isDuelConfirmed)
-        console.log('duelError:', duelError)
-        console.log('confirmError:', confirmError)
-    }, [duelHash, isStarting, isConfirming, isDuelConfirmed, duelError, confirmError])
+    // Hook pour lire le tokenURI et récupérer les SVG
+    const { data: myTokenURI } = useReadContract({
+        address: CONTRACT_ADDRESSES.MonanimalNFT,
+        abi: MONANIMAL_ABI,
+        functionName: 'tokenURI',
+        args: [BigInt(currentBattleParticipants?.myMonanimalId || 0)],
+        query: {
+            enabled: !!currentBattleParticipants?.myMonanimalId,
+        },
+    })
+
+    const { data: opponentTokenURI } = useReadContract({
+        address: CONTRACT_ADDRESSES.MonanimalNFT,
+        abi: MONANIMAL_ABI,
+        functionName: 'tokenURI',
+        args: [BigInt(currentBattleParticipants?.opponentId || 0)],
+        query: {
+            enabled: !!currentBattleParticipants?.opponentId,
+        },
+    })
 
     // Déterminer le résultat de la bataille après confirmation
     useEffect(() => {
-        if (isDuelConfirmed && currentBattleParticipants && preBattleStats) {
-            console.log('=== Battle confirmed, determining result ===')
+        if (isDuelConfirmed && currentBattleParticipants) {
+            console.log('=== Battle confirmed, determining winner ===')
 
-            const determineBattleResult = async () => {
+            const determineBattleWinner = async () => {
                 try {
-                    // Attendre un peu pour que les stats soient mises à jour sur la blockchain
-                    await new Promise(resolve => setTimeout(resolve, 2000))
+                    // Attendre un peu pour que la transaction soit finalisée
+                    await new Promise(resolve => setTimeout(resolve, 1500))
 
-                    // Relire les stats après la bataille
-                    const myStatsAfter = await refetchMyMonanimal()
-                    const opponentStatsAfter = await refetchOpponentMonanimal()
+                    // Recharger les batailles du joueur pour obtenir la dernière bataille
+                    const battlesResult = await refetchPlayerBattles()
+                    
+                    if (battlesResult.data && battlesResult.data.length > 0) {
+                        // Prendre la dernière bataille (la plus récente)
+                        const lastBattleId = battlesResult.data[battlesResult.data.length - 1]
+                        console.log('📊 Reading battle result for battle ID:', lastBattleId.toString())
 
-                    if (myStatsAfter.data && opponentStatsAfter.data) {
-                        const myWinsAfter = Number(myStatsAfter.data.wins)
-                        const myLossesAfter = Number(myStatsAfter.data.losses)
+                        // Utiliser un hook temporaire pour lire la bataille
+                        const { readContract } = await import('wagmi/actions')
+                        const { config } = await import('../config/web3')
+                        
+                        const battleResult = await readContract(config, {
+                            address: CONTRACT_ADDRESSES.BattleArena as `0x${string}`,
+                            abi: BATTLE_ARENA_ABI,
+                            functionName: 'getBattle',
+                            args: [lastBattleId]
+                        }) as any
 
-                        console.log('=== Battle Result Analysis ===')
-                        console.log('Pre-battle - My wins:', preBattleStats.myWins, 'My losses:', preBattleStats.myLosses)
-                        console.log('Post-battle - My wins:', myWinsAfter, 'My losses:', myLossesAfter)
+                        console.log('🎯 Battle result:', battleResult)
 
-                        // Déterminer qui a gagné en comparant les changements de stats
-                        const didIWin = myWinsAfter > preBattleStats.myWins
-                        const didILose = myLossesAfter > preBattleStats.myLosses
+                        const winnerId = Number(battleResult.winner)
+                        const myMonanimalId = currentBattleParticipants.myMonanimalId
+                        const opponentId = currentBattleParticipants.opponentId
 
-                        // Transformer les données du contrat en format Monanimal
-                        const transformContractToMonanimal = (contractData: any, id: number): Monanimal => ({
+                        const didIWin = winnerId === myMonanimalId
+                        
+                        console.log('🏆 Battle analysis:')
+                        console.log('  Winner ID:', winnerId)
+                        console.log('  My Monanimal ID:', myMonanimalId)
+                        console.log('  Opponent ID:', opponentId)
+                        console.log('  Did I win?', didIWin)
+
+                        // Récupérer les vraies données des Monanimals
+                        const myData = await refetchMyMonanimal()
+                        const opponentData = await refetchOpponentMonanimal()
+
+                        // Fonction pour extraire l'image SVG du tokenURI
+                        const extractSVGFromTokenURI = (tokenURI: string) => {
+                            try {
+                                if (tokenURI.startsWith('data:application/json;base64,')) {
+                                    const base64Data = tokenURI.replace('data:application/json;base64,', '')
+                                    const jsonData = JSON.parse(atob(base64Data))
+                                    return jsonData.image || null
+                                }
+                            } catch (error) {
+                                console.error('Error extracting SVG:', error)
+                            }
+                            return null
+                        }
+
+                        // Transformer les données du contrat en format Monanimal avec SVG
+                        const transformContractToMonanimal = (contractData: any, id: number, tokenURI?: string): Monanimal => ({
                             id,
-                            name: contractData.name,
-                            class: contractData.class.toString(),
-                            rarity: contractData.rarity.toString(),
-                            level: Number(contractData.level),
-                            health: Number(contractData.stats.health),
-                            attack: Number(contractData.stats.attack),
-                            defense: Number(contractData.stats.defense),
-                            speed: Number(contractData.stats.speed),
-                            magic: Number(contractData.stats.magic),
-                            luck: Number(contractData.stats.luck),
-                            wins: Number(contractData.wins),
-                            losses: Number(contractData.losses),
-                            isKO: contractData.isKO,
+                            name: contractData?.name || `Monanimal #${id}`,
+                            class: contractData?.class?.toString() || 'Fighter',
+                            rarity: contractData?.rarity?.toString() || 'Common',
+                            level: Number(contractData?.level || 1),
+                            health: Number(contractData?.stats?.health || 100),
+                            attack: Number(contractData?.stats?.attack || 50),
+                            defense: Number(contractData?.stats?.defense || 30),
+                            speed: Number(contractData?.stats?.speed || 40),
+                            magic: Number(contractData?.stats?.magic || 20),
+                            luck: Number(contractData?.stats?.luck || 10),
+                            wins: Number(contractData?.wins || 0),
+                            losses: Number(contractData?.losses || 0),
+                            isKO: contractData?.isKO || false,
+                            image: tokenURI ? extractSVGFromTokenURI(tokenURI) : undefined,
                         })
 
-                        const myMonanimal = transformContractToMonanimal(myStatsAfter.data, currentBattleParticipants.myMonanimalId)
-                        const opponentMonanimal = transformContractToMonanimal(opponentStatsAfter.data, currentBattleParticipants.opponentId)
+                        const myMonanimal = transformContractToMonanimal(myData.data, myMonanimalId, myTokenURI as string)
+                        const opponentMonanimal = transformContractToMonanimal(opponentData.data, opponentId, opponentTokenURI as string)
 
-                        if (didIWin && !didILose) {
-                            console.log('✅ Victory detected!')
+                        if (didIWin) {
+                            console.log('✅ Victory!')
                             setBattleResult({
                                 won: true,
                                 experience: 100,
-                                message: 'Victory! Your Monanimal has won the battle!',
+                                message: `Victory! Your ${myMonanimal.name} has won the battle!`,
                                 winner: myMonanimal,
                                 loser: opponentMonanimal,
                                 battleLog: [
                                     'Battle executed on blockchain',
-                                    'Your Monanimal fought bravely',
-                                    'Victory achieved!',
-                                    'Stats updated on blockchain'
+                                    `Your ${myMonanimal.name} fought bravely`,
+                                    `Opponent ${opponentMonanimal.name} was defeated`,
+                                    'Victory achieved! 🎉'
                                 ],
                                 rewards: {
                                     experience: 100,
                                     items: [],
                                 },
                             })
-                        } else if (didILose && !didIWin) {
-                            console.log('❌ Defeat detected!')
+                        } else {
+                            console.log('❌ Defeat!')
                             setBattleResult({
                                 won: false,
                                 experience: 25,
-                                message: 'Defeat! Your Monanimal was defeated in battle.',
+                                message: `Defeat! Your ${myMonanimal.name} was defeated.`,
                                 winner: opponentMonanimal,
                                 loser: myMonanimal,
                                 battleLog: [
                                     'Battle executed on blockchain',
-                                    'Your Monanimal fought bravely',
-                                    'Unfortunately defeated...',
-                                    'Stats updated on blockchain'
+                                    `Your ${myMonanimal.name} fought bravely`,
+                                    `Opponent ${opponentMonanimal.name} emerged victorious`,
+                                    'Better luck next time! 💪'
                                 ],
                                 rewards: {
                                     experience: 25,
                                     items: [],
                                 },
                             })
-                        } else {
-                            console.log('⚠️ Unclear battle result, checking KO status')
-                            // Si pas de changement dans wins/losses, vérifier le statut KO
-                            const amIKO = myStatsAfter.data.isKO
-                            const isOpponentKO = opponentStatsAfter.data.isKO
-
-                            if (isOpponentKO && !amIKO) {
-                                console.log('✅ Victory by KO detected!')
-                                setBattleResult({
-                                    won: true,
-                                    experience: 100,
-                                    message: 'Victory! Your opponent was knocked out!',
-                                    winner: myMonanimal,
-                                    loser: opponentMonanimal,
-                                    battleLog: [
-                                        'Battle executed on blockchain',
-                                        'Opponent knocked out!',
-                                        'Victory achieved!',
-                                        'Stats updated on blockchain'
-                                    ],
-                                    rewards: {
-                                        experience: 100,
-                                        items: [],
-                                    },
-                                })
-                            } else if (amIKO && !isOpponentKO) {
-                                console.log('❌ Defeat by KO detected!')
-                                setBattleResult({
-                                    won: false,
-                                    experience: 0,
-                                    message: 'Defeat! Your Monanimal was knocked out!',
-                                    winner: opponentMonanimal,
-                                    loser: myMonanimal,
-                                    battleLog: [
-                                        'Battle executed on blockchain',
-                                        'Your Monanimal was knocked out!',
-                                        'Defeat...',
-                                        'Stats updated on blockchain'
-                                    ],
-                                    rewards: {
-                                        experience: 0,
-                                        items: [],
-                                    },
-                                })
-                            } else {
-                                console.log('⚠️ Battle result unclear, showing neutral result')
-                                setBattleResult({
-                                    won: null,
-                                    experience: 50,
-                                    message: 'Battle completed! Check your Monanimal stats for details.',
-                                    winner: null,
-                                    loser: null,
-                                    battleLog: [
-                                        'Battle executed on blockchain',
-                                        'Smart contract determined the outcome',
-                                        'All stats updated',
-                                        'Check Collection for details'
-                                    ],
-                                    rewards: {
-                                        experience: 50,
-                                        items: [],
-                                    },
-                                })
-                            }
                         }
+                    } else {
+                        throw new Error('No battle data found')
                     }
+
                 } catch (error) {
-                    console.error('❌ Error determining battle result:', error)
-                    // En cas d'erreur, afficher un résultat neutre
+                    console.error('❌ Error determining battle winner:', error)
                     setBattleResult({
                         won: null,
                         experience: 25,
-                        message: 'Battle completed! Unable to determine result details.',
+                        message: 'Battle completed! Unable to determine winner details.',
                         winner: null,
                         loser: null,
                         battleLog: [
-                            'Battle executed on blockchain',
-                            'Error reading detailed results',
+                            'Battle transaction confirmed',
+                            'Unable to fetch detailed results',
                             'Check Collection for updated stats'
                         ],
                         rewards: {
@@ -253,9 +261,9 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
                 }
             }
 
-            determineBattleResult()
+            determineBattleWinner()
         }
-    }, [isDuelConfirmed, currentBattleParticipants, preBattleStats, refetchMyMonanimal, refetchOpponentMonanimal])
+    }, [isDuelConfirmed, currentBattleParticipants, refetchPlayerBattles])
 
     const startDuel = (monanimalId: number, opponentId: number) => {
         console.log('=== startDuel called ===')
@@ -296,33 +304,8 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
         // Stocker les participants pour pouvoir déterminer le résultat plus tard
         setCurrentBattleParticipants({ myMonanimalId: monanimalId, opponentId })
 
-        // Capturer les stats avant la bataille pour pouvoir comparer après
-        const capturePreBattleStats = async () => {
-            try {
-                // Lire les stats actuelles des deux Monanimals
-                const myStats = await refetchMyMonanimal()
-                const opponentStats = await refetchOpponentMonanimal()
-
-                if (myStats.data && opponentStats.data) {
-                    setPreBattleStats({
-                        myWins: Number(myStats.data.wins),
-                        myLosses: Number(myStats.data.losses),
-                        opponentWins: Number(opponentStats.data.wins),
-                        opponentLosses: Number(opponentStats.data.losses)
-                    })
-                    console.log('✅ Pre-battle stats captured:', {
-                        myWins: Number(myStats.data.wins),
-                        myLosses: Number(myStats.data.losses),
-                        opponentWins: Number(opponentStats.data.wins),
-                        opponentLosses: Number(opponentStats.data.losses)
-                    })
-                }
-            } catch (error) {
-                console.error('❌ Error capturing pre-battle stats:', error)
-            }
-        }
-
-        capturePreBattleStats()
+        // Note: Pas besoin de capturer les stats pour BattleArenaOptimized
+        console.log('🎯 Using BattleArenaOptimized - simplified battle flow')
 
         try {
             console.log('📤 Calling createDuel with params:', {

@@ -5,6 +5,7 @@ import { formatEther } from 'viem'
 import { CONTRACT_ADDRESSES, MONANIMAL_ABI } from '../config/web3'
 
 import type { Monanimal, UseMonanimalsReturn } from '../types'
+import { createFallbackSVG } from '@/utils/svgUtils'
 
 
 export function useMonanimals(): UseMonanimalsReturn {
@@ -153,26 +154,8 @@ export function useMonanimals(): UseMonanimalsReturn {
 
                     // Fallback vers SVG par défaut si pas de SVG on-chain
                     if (!imageUrl) {
-                        console.warn(`⚠️ Pas de SVG on-chain pour le token ${tokenId}, utilisation du fallback`)
-                        imageUrl = `data:image/svg+xml;base64,${btoa(`
-              <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="bg${tokenId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#200052;stop-opacity:1" />
-                  </linearGradient>
-                </defs>
-                <rect width="200" height="200" fill="url(#bg${tokenId})"/>
-                <circle cx="100" cy="80" r="30" fill="#FFFFFF" opacity="0.9"/>
-                <circle cx="85" cy="75" r="8" fill="#000"/>
-                <circle cx="115" cy="75" r="8" fill="#000"/>
-                <circle cx="87" cy="73" r="2" fill="#FFF"/>
-                <circle cx="117" cy="73" r="2" fill="#FFF"/>
-                <ellipse cx="100" cy="120" rx="40" ry="30" fill="#A0055D" opacity="0.8"/>
-                <text x="100" y="160" text-anchor="middle" fill="white" font-size="12">${classNames[data.class]}</text>
-                <text x="100" y="175" text-anchor="middle" fill="#836EF9" font-size="10">#${tokenId}</text>
-              </svg>
-            `)}`
+                        console.warn(`⚠️ Pas de SVG on-chain pour le token ${tokenId}, utilisation du fallback`);
+                        imageUrl = createFallbackSVG();
                     }
 
                     const monanimal: Monanimal = {

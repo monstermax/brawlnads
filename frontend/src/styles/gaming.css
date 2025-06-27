@@ -37,11 +37,51 @@ a:hover {
   text-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
 }
 
+/* Gaming Typography */
+.gaming-title {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow:
+    0 0 10px rgba(139, 92, 246, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6, #ec4899);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gaming-subtitle {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow:
+    0 0 8px rgba(139, 92, 246, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 /* Grid Pattern Background */
 .bg-grid-pattern {
   background-image: 
-    linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(131, 110, 249, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(131, 110, 249, 0.08) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 

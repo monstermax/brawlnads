@@ -31,9 +31,9 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center space-x-1">
             <Link
               to="/"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/') 
-                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -42,9 +42,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/collection"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/collection') 
-                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -53,9 +53,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/battle"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/battle') 
-                  ? 'bg-red-600/30 text-red-400 border border-red-500/50' 
+                  ? 'bg-red-600/40 text-red-300 border border-red-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -64,9 +64,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/leaderboard"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/leaderboard') 
-                  ? 'bg-yellow-600/30 text-yellow-400 border border-yellow-500/50' 
+                  ? 'bg-yellow-600/40 text-yellow-300 border border-yellow-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -75,9 +75,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/forge"
-              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+              className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/forge') 
-                  ? 'bg-orange-600/30 text-orange-400 border border-orange-500/50' 
+                  ? 'bg-orange-600/40 text-orange-300 border border-orange-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -89,8 +89,8 @@ const Navbar: React.FC = () => {
           {/* Right Side - Network & Wallet */}
           <div className="flex items-center space-x-4">
             {/* Network Badge */}
-            <Badge className="bg-blue-600/20 text-blue-400 border-blue-500/30 font-mono text-xs hidden sm:flex">
-              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
+            <Badge className="bg-cyan-600/20 text-cyan-400 border-cyan-500/30 font-mono text-xs hidden sm:flex">
+              <div className="w-2 h-2 bg-cyan-400 rounded-full mr-2 animate-pulse"></div>
               MONAD TESTNET
             </Badge>
 
@@ -129,9 +129,9 @@ const Navbar: React.FC = () => {
           <div className="flex flex-wrap gap-2">
             <Link
               to="/"
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/') 
-                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -139,9 +139,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/collection"
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/collection') 
-                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -149,9 +149,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/battle"
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/battle') 
-                  ? 'bg-red-600/30 text-red-400 border border-red-500/50' 
+                  ? 'bg-red-600/40 text-red-300 border border-red-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -159,9 +159,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/leaderboard"
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/leaderboard') 
-                  ? 'bg-yellow-600/30 text-yellow-400 border border-yellow-500/50' 
+                  ? 'bg-yellow-600/40 text-yellow-300 border border-yellow-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -169,9 +169,9 @@ const Navbar: React.FC = () => {
             </Link>
             <Link
               to="/forge"
-              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/forge') 
-                  ? 'bg-orange-600/30 text-orange-400 border border-orange-500/50' 
+                  ? 'bg-orange-600/40 text-orange-300 border border-orange-400/60' 
                   : 'text-gray-300 hover:text-white hover:bg-white/5'
               }`}
             >

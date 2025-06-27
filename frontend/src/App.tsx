@@ -23,11 +23,11 @@ const App: React.FC = () => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <div className="App min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
+          <div className="App min-h-screen" style={{ background: 'linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%)' }}>
             <Navbar />
             <main className="relative">
-              {/* Background Effects */}
-              <div className="fixed inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+              {/* Monad Background Effects */}
+              <div className="fixed inset-0 bg-grid-pattern opacity-3 pointer-events-none"></div>
               <div className="fixed inset-0 scan-lines pointer-events-none"></div>
               
               <Routes>

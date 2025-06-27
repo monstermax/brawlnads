@@ -10,22 +10,22 @@ const Home: React.FC = () => {
     const { monanimals, loading, mint, isMinting, mintPrice } = useMonanimals()
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-            {/* Animated Background Elements */}
+        <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%)' }}>
+            {/* Monad-themed Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse animation-delay-4000"></div>
+                <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse" style={{ backgroundColor: '#836EF9' }}></div>
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse animation-delay-2000" style={{ backgroundColor: '#A0055D' }}></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-8 animate-pulse animation-delay-4000" style={{ backgroundColor: '#200052' }}></div>
             </div>
 
-            {/* Grid Pattern Overlay */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+            {/* Monad Grid Pattern Overlay */}
+            <div className="absolute inset-0 bg-grid-pattern opacity-3"></div>
 
             <div className="relative z-10 container mx-auto px-4 py-8">
                 {/* Hero Section */}
                 <div className="text-center py-20">
                     <div className="mb-8">
-                        <h1 className="text-6xl md:text-8xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4 tracking-wide font-mono">
+                        <h1 className="text-6xl md:text-8xl gaming-title mb-4">
                             BRAWLNADS
                         </h1>
                         <div className="flex items-center justify-center gap-2 mb-6">
@@ -105,11 +105,11 @@ const Home: React.FC = () => {
                 {/* Stats Dashboard */}
                 {isConnected && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                        <div className="bg-black/40 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all duration-300 group">
+                        <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all duration-300 group">
                             <div className="text-center">
                                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">🐉</div>
-                                <h3 className="text-purple-400 font-semibold mb-2">MONANIMALS</h3>
-                                <div className="text-3xl font-bold text-white">
+                                <h3 className="text-purple-300 font-semibold mb-2 text-enhanced">MONANIMALS</h3>
+                                <div className="text-3xl font-bold text-white text-enhanced">
                                     {loading ? (
                                         <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
                                     ) : (
@@ -119,11 +119,11 @@ const Home: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="bg-black/40 backdrop-blur-md border border-yellow-500/30 rounded-2xl p-6 hover:border-yellow-400/50 transition-all duration-300 group">
+                        <div className="bg-black/60 backdrop-blur-md border border-yellow-500/30 rounded-2xl p-6 hover:border-yellow-400/50 transition-all duration-300 group">
                             <div className="text-center">
                                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">⚔️</div>
-                                <h3 className="text-yellow-400 font-semibold mb-2">VICTORIES</h3>
-                                <div className="text-3xl font-bold text-white">
+                                <h3 className="text-yellow-300 font-semibold mb-2 text-enhanced">VICTORIES</h3>
+                                <div className="text-3xl font-bold text-white text-enhanced">
                                     {loading ? (
                                         <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
                                     ) : (
@@ -133,11 +133,11 @@ const Home: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="bg-black/40 backdrop-blur-md border border-green-500/30 rounded-2xl p-6 hover:border-green-400/50 transition-all duration-300 group">
+                        <div className="bg-black/60 backdrop-blur-md border border-green-500/30 rounded-2xl p-6 hover:border-green-400/50 transition-all duration-300 group">
                             <div className="text-center">
                                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">🏆</div>
-                                <h3 className="text-green-400 font-semibold mb-2">WIN RATE</h3>
-                                <div className="text-3xl font-bold text-white">
+                                <h3 className="text-green-300 font-semibold mb-2 text-enhanced">WIN RATE</h3>
+                                <div className="text-3xl font-bold text-white text-enhanced">
                                     {loading ? (
                                         <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
                                     ) : (() => {
@@ -150,11 +150,11 @@ const Home: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="bg-black/40 backdrop-blur-md border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-400/50 transition-all duration-300 group">
+                        <div className="bg-black/60 backdrop-blur-md border border-cyan-500/30 rounded-2xl p-6 hover:border-cyan-400/50 transition-all duration-300 group">
                             <div className="text-center">
                                 <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">⭐</div>
-                                <h3 className="text-cyan-400 font-semibold mb-2">MAX LEVEL</h3>
-                                <div className="text-3xl font-bold text-white">
+                                <h3 className="text-cyan-300 font-semibold mb-2 text-enhanced">MAX LEVEL</h3>
+                                <div className="text-3xl font-bold text-white text-enhanced">
                                     {loading ? (
                                         <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
                                     ) : (
@@ -198,7 +198,7 @@ const Home: React.FC = () => {
                             </Link>
 
                             <Link to="/collection" className="group">
-                                <div className="bg-gradient-to-br from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all duration-300 transform hover:scale-105">
+                                <div className="bg-gradient-to-br from-purple-600/20 to-indigo-600/20 border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all duration-300 transform hover:scale-105">
                                     <div className="text-center">
                                         <div className="text-5xl mb-4 group-hover:animate-bounce">💎</div>
                                         <h3 className="text-xl font-bold text-purple-400 mb-2">COLLECTION</h3>
@@ -213,9 +213,9 @@ const Home: React.FC = () => {
                 {/* Call to Action for New Users */}
                 {isConnected && monanimals.length === 0 && (
                     <div className="text-center py-12">
-                        <div className="bg-black/40 backdrop-blur-md border border-cyan-500/30 rounded-3xl p-8 max-w-2xl mx-auto">
+                        <div className="bg-black/60 backdrop-blur-md border border-cyan-500/30 rounded-3xl p-8 max-w-2xl mx-auto">
                             <div className="text-6xl mb-6">🚀</div>
-                            <h2 className="text-3xl font-bold text-white mb-4">Ready to Begin?</h2>
+                            <h2 className="text-3xl font-bold text-white text-enhanced mb-4">Ready to Begin?</h2>
                             <p className="text-gray-400 mb-8 text-lg">
                                 Mint your first Monanimal NFT to start your journey in the BrawlNads universe!
                             </p>

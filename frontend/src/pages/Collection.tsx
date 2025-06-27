@@ -44,16 +44,16 @@ const Collection: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-        {/* Background Effects */}
+      <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%)' }}>
+        {/* Monad Background Effects */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse" style={{ backgroundColor: '#836EF9' }}></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse animation-delay-2000" style={{ backgroundColor: '#A0055D' }}></div>
         </div>
 
         <div className="relative z-10 container mx-auto px-4 py-20">
           <div className="max-w-md mx-auto">
-            <div className="bg-black/40 backdrop-blur-md border border-red-500/30 rounded-3xl p-8 text-center">
+            <div className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-3xl p-8 text-center">
               <div className="text-6xl mb-6">🔒</div>
               <h2 className="text-3xl font-bold text-white mb-4">Access Denied</h2>
               <p className="text-gray-300 mb-8 text-lg">
@@ -72,24 +72,24 @@ const Collection: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
-      {/* Background Effects */}
+    <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%)' }}>
+      {/* Monad Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse" style={{ backgroundColor: '#836EF9' }}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse animation-delay-2000" style={{ backgroundColor: '#A0055D' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-8 animate-pulse animation-delay-4000" style={{ backgroundColor: '#200052' }}></div>
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 font-mono tracking-wide">
               💎 MY COLLECTION
             </h1>
             <div className="flex items-center gap-2">
               <div className="h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent flex-1 max-w-xs"></div>
-              <span className="text-cyan-400 text-sm font-mono tracking-widest">
+              <span className="text-cyan-300 text-sm font-mono tracking-widest">
                 {loading ? 'LOADING...' : `${filteredMonanimals.length} OF ${monanimals.length} MONANIMALS`}
               </span>
               <div className="h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent flex-1 max-w-xs"></div>
@@ -116,7 +116,7 @@ const Collection: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-black/40 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 mb-8">
+        <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-purple-400 font-semibold mb-2 text-sm">🎭 RARITY</label>
@@ -190,11 +190,11 @@ const Collection: React.FC = () => {
           </div>
         ) : filteredMonanimals.length === 0 ? (
           <div className="text-center py-20">
-            <div className="bg-black/40 backdrop-blur-md border border-purple-500/30 rounded-3xl p-12 max-w-2xl mx-auto">
+            <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-3xl p-12 max-w-2xl mx-auto">
               {monanimals.length === 0 ? (
                 <>
                   <div className="text-8xl mb-8">🐉</div>
-                  <h2 className="text-4xl font-bold text-white mb-4">Empty Collection</h2>
+                  <h2 className="text-4xl font-bold text-white mb-4 font-mono tracking-wide">Empty Collection</h2>
                   <p className="text-gray-300 mb-8 text-lg">
                     Your legendary journey begins with your first Monanimal. 
                     Mint one now and start building your epic collection!
@@ -220,7 +220,7 @@ const Collection: React.FC = () => {
               ) : (
                 <>
                   <div className="text-8xl mb-8">🔍</div>
-                  <h2 className="text-4xl font-bold text-white mb-4">No Matches Found</h2>
+                  <h2 className="text-4xl font-bold text-white mb-4 font-mono tracking-wide">No Matches Found</h2>
                   <p className="text-gray-300 mb-8 text-lg">
                     Try adjusting your filters to discover more Monanimals in your collection
                   </p>
@@ -230,7 +230,7 @@ const Collection: React.FC = () => {
                       setSelectedClass('All')
                       setSortBy('level')
                     }}
-                    className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
+                    className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
                   >
                     <span className="mr-2">🔄</span>
                     RESET FILTERS
@@ -243,26 +243,26 @@ const Collection: React.FC = () => {
           <>
             {/* Collection Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-black/40 backdrop-blur-md border border-purple-500/30 rounded-xl p-4 text-center">
+              <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-2">🐉</div>
                 <div className="text-2xl font-bold text-purple-400">{filteredMonanimals.length}</div>
                 <div className="text-xs text-gray-300">SHOWING</div>
               </div>
-              <div className="bg-black/40 backdrop-blur-md border border-yellow-500/30 rounded-xl p-4 text-center">
+              <div className="bg-black/60 backdrop-blur-md border border-yellow-500/30 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-2">⭐</div>
                 <div className="text-2xl font-bold text-yellow-400">
                   {filteredMonanimals.length > 0 ? Math.max(...filteredMonanimals.map(m => m.level)) : 0}
                 </div>
                 <div className="text-xs text-gray-300">MAX LVL</div>
               </div>
-              <div className="bg-black/40 backdrop-blur-md border border-green-500/30 rounded-xl p-4 text-center">
+              <div className="bg-black/60 backdrop-blur-md border border-green-500/30 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-2">🏆</div>
                 <div className="text-2xl font-bold text-green-400">
                   {filteredMonanimals.reduce((total, m) => total + m.wins, 0)}
                 </div>
                 <div className="text-xs text-gray-300">WINS</div>
               </div>
-              <div className="bg-black/40 backdrop-blur-md border border-cyan-500/30 rounded-xl p-4 text-center">
+              <div className="bg-black/60 backdrop-blur-md border border-cyan-500/30 rounded-xl p-4 text-center">
                 <div className="text-2xl mb-2">💎</div>
                 <div className="text-2xl font-bold text-cyan-400">
                   {new Set(filteredMonanimals.map(m => m.rarity)).size}

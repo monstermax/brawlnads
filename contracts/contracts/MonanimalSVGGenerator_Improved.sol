@@ -28,7 +28,9 @@ library MonanimalSVGGenerator_Improved {
             '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">',
             _generateDefs(params),
             _generateBackground(),
+            _generateCharacterHalo(params),
             _generateBody(params),
+            _generateHead(params),
             _generateFace(params),
             _generateClassAccessory(params),
             _generateRarityEffects(params),
@@ -40,55 +42,84 @@ library MonanimalSVGGenerator_Improved {
     function _generateDefs(SVGParams memory params) internal pure returns (string memory) {
         return string(abi.encodePacked(
             '<defs>',
-            _getColorGradients(params.colorScheme),
+            _getColorGradients(params),
             _getRarityFilters(params.rarity),
             '</defs>'
         ));
     }
 
-    function _getColorGradients(string memory scheme) internal pure returns (string memory) {
-        // Couleurs Monad selon le schéma
-        if (keccak256(bytes(scheme)) == keccak256(bytes("purple-blue"))) {
-            return string(abi.encodePacked(
-                '<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />',
-                '<stop offset="100%" style="stop-color:#200052;stop-opacity:1" />',
-                '</linearGradient>',
-                '<linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" style="stop-color:#A0055D;stop-opacity:1" />',
-                '<stop offset="100%" style="stop-color:#836EF9;stop-opacity:1" />',
-                '</linearGradient>'
+    function _getColorGradients(SVGParams memory params) internal pure returns (string memory) {
+        // Dégradé de fond sombre élégant
+        string memory bgGradient = string(abi.encodePacked(
+            '<radialGradient id="bg" cx="50%" cy="30%" r="70%">',
+            '<stop offset="0%" style="stop-color:#2a1a4a;stop-opacity:1" />',
+            '<stop offset="70%" style="stop-color:#1a0d2e;stop-opacity:1" />',
+            '<stop offset="100%" style="stop-color:#0d0515;stop-opacity:1" />',
+            '</radialGradient>'
+        ));
+
+        // Dégradés de corps selon classe et rareté
+        string memory bodyGradient;
+        if (params.class == 0) { // Warrior - Violet/Rose
+            if (params.rarity >= 3) {
+                bodyGradient = string(abi.encodePacked(
+                    '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                    '<stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1" />',
+                    '<stop offset="70%" style="stop-color:#c44569;stop-opacity:1" />',
+                    '<stop offset="100%" style="stop-color:#836EF9;stop-opacity:1" />',
+                    '</radialGradient>'
+                ));
+            } else {
+                bodyGradient = string(abi.encodePacked(
+                    '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                    '<stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />',
+                    '<stop offset="70%" style="stop-color:#5c2a6b;stop-opacity:1" />',
+                    '<stop offset="100%" style="stop-color:#3d1a4a;stop-opacity:1" />',
+                    '</radialGradient>'
+                ));
+            }
+        } else if (params.class == 1) { // Assassin - Violet foncé
+            bodyGradient = string(abi.encodePacked(
+                '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                '<stop offset="0%" style="stop-color:#6a4c93;stop-opacity:1" />',
+                '<stop offset="70%" style="stop-color:#4a2c5a;stop-opacity:1" />',
+                '<stop offset="100%" style="stop-color:#2d1b3d;stop-opacity:1" />',
+                '</radialGradient>'
             ));
-        } else if (keccak256(bytes(scheme)) == keccak256(bytes("cosmic-purple"))) {
-            return string(abi.encodePacked(
-                '<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" style="stop-color:#200052;stop-opacity:1" />',
-                '<stop offset="100%" style="stop-color:#836EF9;stop-opacity:1" />',
-                '</linearGradient>',
-                '<linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />',
-                '<stop offset="100%" style="stop-color:#FBFAF9;stop-opacity:1" />',
-                '</linearGradient>'
+        } else if (params.class == 2) { // Mage - Bleu mystique
+            bodyGradient = string(abi.encodePacked(
+                '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                '<stop offset="0%" style="stop-color:#4a90e2;stop-opacity:1" />',
+                '<stop offset="70%" style="stop-color:#2e5c8a;stop-opacity:1" />',
+                '<stop offset="100%" style="stop-color:#1a3a5c;stop-opacity:1" />',
+                '</radialGradient>'
+            ));
+        } else if (params.class == 3) { // Berserker - Rouge/Violet
+            bodyGradient = string(abi.encodePacked(
+                '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                '<stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />',
+                '<stop offset="70%" style="stop-color:#a93226;stop-opacity:1" />',
+                '<stop offset="100%" style="stop-color:#6b1f17;stop-opacity:1" />',
+                '</radialGradient>'
+            ));
+        } else { // Guardian - Bleu/Violet
+            bodyGradient = string(abi.encodePacked(
+                '<radialGradient id="body" cx="50%" cy="40%" r="60%">',
+                '<stop offset="0%" style="stop-color:#5a67d8;stop-opacity:1" />',
+                '<stop offset="70%" style="stop-color:#4c51bf;stop-opacity:1" />',
+                '<stop offset="100%" style="stop-color:#3c366b;stop-opacity:1" />',
+                '</radialGradient>'
             ));
         }
-        // Schéma par défaut
-        return string(abi.encodePacked(
-            '<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">',
-            '<stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />',
-            '<stop offset="100%" style="stop-color:#FBFAF9;stop-opacity:1" />',
-            '</linearGradient>',
-            '<linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="100%">',
-            '<stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />',
-            '<stop offset="100%" style="stop-color:#200052;stop-opacity:1" />',
-            '</linearGradient>'
-        ));
+
+        return string(abi.encodePacked(bgGradient, bodyGradient));
     }
 
     function _getRarityFilters(uint256 rarity) internal pure returns (string memory) {
         if (rarity >= 4) { // Legendary or Mythic
-            return '<filter id="glow"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+            return '<filter id="glow"><feGaussianBlur stdDeviation="6" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
         } else if (rarity >= 2) { // Rare or Epic
-            return '<filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+            return '<filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
         }
         return '';
     }
@@ -97,86 +128,131 @@ library MonanimalSVGGenerator_Improved {
         return '<rect width="400" height="400" fill="url(#bg)"/>';
     }
 
+    function _generateCharacterHalo(SVGParams memory params) internal pure returns (string memory) {
+        // Halo coloré qui entoure tout le personnage comme dans vos screenshots
+        if (params.rarity >= 2) {
+            string memory haloColor;
+            if (params.rarity >= 5) {
+                haloColor = "#FFD700"; // Or pour Mythic
+            } else if (params.rarity >= 4) {
+                haloColor = "#ff6b9d"; // Rose pour Legendary
+            } else if (params.rarity >= 3) {
+                haloColor = "#836EF9"; // Violet pour Epic
+            } else {
+                haloColor = "#A0055D"; // Rose foncé pour Rare
+            }
+
+            return string(abi.encodePacked(
+                // Halo principal - grand cercle coloré autour du personnage
+                '<circle cx="200" cy="200" r="130" fill="', haloColor, '" opacity="0.15"/>',
+                '<circle cx="200" cy="200" r="120" fill="', haloColor, '" opacity="0.1"/>',
+                '<circle cx="200" cy="200" r="110" fill="', haloColor, '" opacity="0.08"/>',
+                // Bordure animée
+                '<circle cx="200" cy="200" r="125" fill="none" stroke="', haloColor, '" stroke-width="2" opacity="0.4">',
+                '<animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite"/>',
+                '</circle>'
+            ));
+        }
+        return '';
+    }
+
     function _generateBody(SVGParams memory params) internal pure returns (string memory) {
         string memory filter = params.rarity >= 2 ? ' filter="url(#glow)"' : '';
+        string memory stroke = ' stroke="#000" stroke-width="3"';
         
-        if (params.class == 0) { // Warrior - Rectangle robuste
+        if (params.class == 0 || params.class == 1 || params.class == 2 || params.class == 3) { // Classes rondes - Petit corps en bas
             return string(abi.encodePacked(
-                '<rect x="150" y="150" width="100" height="120" fill="url(#body)" rx="15"', filter, '/>'
+                '<ellipse cx="200" cy="280" rx="45" ry="25" fill="url(#body)"', stroke, filter, '/>'
             ));
-        } else if (params.class == 1) { // Assassin - Forme furtive
+        } else { // Guardian - Petit corps carré en bas
             return string(abi.encodePacked(
-                '<ellipse cx="200" cy="210" rx="50" ry="70" fill="url(#body)"', filter, '/>'
+                '<rect x="160" y="260" width="80" height="40" fill="url(#body)" rx="8"', stroke, filter, '/>'
             ));
-        } else if (params.class == 2) { // Mage - Cercle mystique
+        }
+    }
+
+    function _generateHead(SVGParams memory params) internal pure returns (string memory) {
+        string memory filter = params.rarity >= 2 ? ' filter="url(#glow)"' : '';
+        string memory stroke = ' stroke="#000" stroke-width="3"';
+        
+        if (params.class == 0 || params.class == 1 || params.class == 2 || params.class == 3) { // Classes rondes - Grande tête ronde
             return string(abi.encodePacked(
-                '<circle cx="200" cy="200" r="60" fill="url(#body)"', filter, '/>'
+                '<circle cx="200" cy="180" r="65" fill="url(#body)"', stroke, filter, '/>'
             ));
-        } else if (params.class == 3) { // Berserker - Forme agressive
+        } else { // Guardian - Grande tête carrée
             return string(abi.encodePacked(
-                '<polygon points="200,140 260,200 200,260 140,200" fill="url(#body)"', filter, '/>'
-            ));
-        } else { // Guardian - Forme défensive
-            return string(abi.encodePacked(
-                '<rect x="140" y="140" width="120" height="120" fill="url(#body)" rx="25"', filter, '/>'
+                '<rect x="140" y="120" width="120" height="120" fill="url(#body)" rx="20"', stroke, filter, '/>'
             ));
         }
     }
 
     function _generateFace(SVGParams memory params) internal pure returns (string memory) {
-        // Yeux style grenouille Monad - plus grands et expressifs
-        return string(abi.encodePacked(
-            // Yeux blancs
-            '<circle cx="175" cy="180" r="18" fill="#FFFFFF" opacity="0.9"/>',
-            '<circle cx="225" cy="180" r="18" fill="#FFFFFF" opacity="0.9"/>',
-            // Pupilles noires
-            '<circle cx="175" cy="180" r="10" fill="#000000"/>',
-            '<circle cx="225" cy="180" r="10" fill="#000000"/>',
-            // Reflets
-            '<circle cx="178" cy="177" r="3" fill="#FFFFFF"/>',
-            '<circle cx="228" cy="177" r="3" fill="#FFFFFF"/>',
-            // Bouche selon la classe
-            _generateMouth(params.class)
-        ));
-    }
-
-    function _generateMouth(uint256 class) internal pure returns (string memory) {
-        if (class == 0) { // Warrior - Sourire déterminé
-            return '<path d="M 185 210 Q 200 220 215 210" stroke="#000" stroke-width="2" fill="none"/>';
-        } else if (class == 1) { // Assassin - Sourire mystérieux
-            return '<path d="M 190 210 Q 200 215 210 210" stroke="#000" stroke-width="2" fill="none"/>';
-        } else if (class == 2) { // Mage - Sourire sage
-            return '<ellipse cx="200" cy="210" rx="8" ry="4" fill="#000000"/>';
-        } else if (class == 3) { // Berserker - Grimace
-            return '<path d="M 185 215 Q 200 205 215 215" stroke="#000" stroke-width="3" fill="none"/>';
-        } else { // Guardian - Sourire protecteur
-            return '<path d="M 185 210 Q 200 218 215 210" stroke="#000" stroke-width="2" fill="none"/>';
+        // Yeux expressifs positionnés sur la grande tête
+        if (params.class == 4) { // Guardian - yeux sur tête carrée
+            return string(abi.encodePacked(
+                // Yeux blancs
+                '<circle cx="175" cy="165" r="18" fill="#FFFFFF" stroke="#000" stroke-width="2"/>',
+                '<circle cx="225" cy="165" r="18" fill="#FFFFFF" stroke="#000" stroke-width="2"/>',
+                // Pupilles noires
+                '<circle cx="175" cy="165" r="10" fill="#000000"/>',
+                '<circle cx="225" cy="165" r="10" fill="#000000"/>',
+                // Reflets brillants
+                '<circle cx="178" cy="162" r="3" fill="#FFFFFF"/>',
+                '<circle cx="228" cy="162" r="3" fill="#FFFFFF"/>',
+                '<circle cx="180" cy="168" r="1.5" fill="#FFFFFF" opacity="0.7"/>',
+                '<circle cx="230" cy="168" r="1.5" fill="#FFFFFF" opacity="0.7"/>',
+                // Bouche
+                '<ellipse cx="200" cy="190" rx="6" ry="4" fill="#000000"/>'
+            ));
+        } else { // Classes rondes - yeux sur tête ronde
+            return string(abi.encodePacked(
+                // Yeux blancs
+                '<circle cx="175" cy="165" r="18" fill="#FFFFFF" stroke="#000" stroke-width="2"/>',
+                '<circle cx="225" cy="165" r="18" fill="#FFFFFF" stroke="#000" stroke-width="2"/>',
+                // Pupilles noires
+                '<circle cx="175" cy="165" r="10" fill="#000000"/>',
+                '<circle cx="225" cy="165" r="10" fill="#000000"/>',
+                // Reflets brillants
+                '<circle cx="178" cy="162" r="3" fill="#FFFFFF"/>',
+                '<circle cx="228" cy="162" r="3" fill="#FFFFFF"/>',
+                '<circle cx="180" cy="168" r="1.5" fill="#FFFFFF" opacity="0.7"/>',
+                '<circle cx="230" cy="168" r="1.5" fill="#FFFFFF" opacity="0.7"/>',
+                // Bouche
+                '<ellipse cx="200" cy="200" rx="6" ry="4" fill="#000000"/>'
+            ));
         }
     }
 
+    function _generateMouth(uint256 /* class */) internal pure returns (string memory) {
+        // Cette fonction n'est plus utilisée car la bouche est dans _generateFace
+        return '';
+    }
+
     function _generateClassAccessory(SVGParams memory params) internal pure returns (string memory) {
-        if (params.class == 0) { // Warrior - Épée simple
+        if (params.class == 0) { // Warrior - Petit chapeau comme dans vos images
             return string(abi.encodePacked(
-                '<rect x="280" y="120" width="8" height="60" fill="#C0C0C0" transform="rotate(15 284 150)"/>',
-                '<rect x="276" y="110" width="16" height="15" fill="#8B4513" transform="rotate(15 284 117)"/>'
+                '<rect x="185" y="110" width="30" height="12" fill="#8B4513" stroke="#000" stroke-width="1" rx="3"/>',
+                '<circle cx="200" cy="116" r="2" fill="#FFD700"/>'
             ));
-        } else if (params.class == 1) { // Assassin - Capuche
-            return '<path d="M 160 140 Q 200 120 240 140 L 240 180 Q 200 160 160 180 Z" fill="#200052" opacity="0.7"/>';
-        } else if (params.class == 2) { // Mage - Chapeau pointu
+        } else if (params.class == 1) { // Assassin - Petit ornement discret
             return string(abi.encodePacked(
-                '<polygon points="200,120 170,160 230,160" fill="#836EF9"/>',
-                '<circle cx="185" cy="155" r="4" fill="#FFD700"/>',
-                '<circle cx="215" cy="155" r="4" fill="#FFD700"/>'
+                '<circle cx="200" cy="115" r="3" fill="#200052" stroke="#000" stroke-width="1"/>',
+                '<circle cx="200" cy="115" r="1.5" fill="#A0055D"/>'
             ));
-        } else if (params.class == 3) { // Berserker - Cornes
+        } else if (params.class == 2) { // Mage - Petit chapeau pointu
             return string(abi.encodePacked(
-                '<polygon points="170,150 175,130 180,150" fill="#A0055D"/>',
-                '<polygon points="220,150 225,130 230,150" fill="#A0055D"/>'
+                '<polygon points="200,105 188,123 212,123" fill="#4a90e2" stroke="#000" stroke-width="1"/>',
+                '<circle cx="200" cy="120" r="1.5" fill="#FFD700"/>'
             ));
-        } else { // Guardian - Bouclier
+        } else if (params.class == 3) { // Berserker - Petites cornes comme vos images
             return string(abi.encodePacked(
-                '<ellipse cx="120" cy="200" rx="25" ry="35" fill="#C0C0C0" stroke="#000" stroke-width="2"/>',
-                '<circle cx="120" cy="200" r="10" fill="#836EF9"/>'
+                '<polygon points="165,140 168,125 172,140" fill="#e74c3c" stroke="#000" stroke-width="1"/>',
+                '<polygon points="228,140 231,125 235,140" fill="#e74c3c" stroke="#000" stroke-width="1"/>'
+            ));
+        } else { // Guardian - Petit ornement sur le dessus comme votre Epic Guardian
+            return string(abi.encodePacked(
+                '<rect x="190" y="110" width="20" height="8" fill="#5a67d8" stroke="#000" stroke-width="1" rx="2"/>',
+                '<circle cx="200" cy="114" r="1.5" fill="#FFD700"/>'
             ));
         }
     }
@@ -184,20 +260,26 @@ library MonanimalSVGGenerator_Improved {
     function _generateRarityEffects(SVGParams memory params) internal pure returns (string memory) {
         if (params.rarity == 5) { // Mythic - Particules scintillantes
             return string(abi.encodePacked(
-                '<circle cx="120" cy="120" r="2" fill="#FFD700" opacity="0.8">',
-                '<animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>',
+                '<circle cx="130" cy="130" r="2" fill="#FFD700" opacity="0.8">',
+                '<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>',
                 '</circle>',
-                '<circle cx="280" cy="150" r="2" fill="#FFD700" opacity="0.6">',
+                '<circle cx="270" cy="150" r="1.5" fill="#FFD700" opacity="0.6">',
                 '<animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>',
                 '</circle>',
-                '<circle cx="150" cy="300" r="2" fill="#FFD700" opacity="0.7">',
-                '<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>',
+                '<circle cx="150" cy="280" r="2" fill="#FFD700" opacity="0.7">',
+                '<animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite"/>',
                 '</circle>'
             ));
         } else if (params.rarity == 4) { // Legendary - Aura dorée
             return string(abi.encodePacked(
-                '<circle cx="200" cy="200" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3">',
-                '<animate attributeName="r" values="75;85;75" dur="3s" repeatCount="indefinite"/>',
+                '<circle cx="200" cy="200" r="90" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.4">',
+                '<animate attributeName="r" values="85;95;85" dur="3s" repeatCount="indefinite"/>',
+                '</circle>'
+            ));
+        } else if (params.rarity == 3) { // Epic - Aura violette
+            return string(abi.encodePacked(
+                '<circle cx="200" cy="200" r="85" fill="none" stroke="#836EF9" stroke-width="1" opacity="0.3">',
+                '<animate attributeName="r" values="80;90;80" dur="4s" repeatCount="indefinite"/>',
                 '</circle>'
             ));
         }
@@ -206,7 +288,7 @@ library MonanimalSVGGenerator_Improved {
 
     function _generateStats(SVGParams memory params) internal pure returns (string memory) {
         return string(abi.encodePacked(
-            '<rect x="10" y="320" width="380" height="70" fill="#000000" fill-opacity="0.8" rx="5"/>',
+            '<rect x="10" y="320" width="380" height="70" fill="#000000" fill-opacity="0.9" rx="8" stroke="#836EF9" stroke-width="1"/>',
             '<text x="20" y="340" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">', params.name, '</text>',
             '<text x="20" y="355" fill="#836EF9" font-family="Arial, sans-serif" font-size="11">Level ', params.level.toString(), ' | ', _getClassName(params.class), ' | ', _getRarityName(params.rarity), '</text>',
             '<text x="20" y="370" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="10">HP:', params.health.toString(), ' ATK:', params.attack.toString(), ' DEF:', params.defense.toString(), '</text>',

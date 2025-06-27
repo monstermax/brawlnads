@@ -260,6 +260,7 @@ async function deployBattleArena(monanimalAddress: string, weaponAddress: string
 async function deployMonanimalNFT() {
     // Déployer MonanimalNFT avec le générateur SVG amélioré
     console.log("\n📦 Déploiement de MonanimalNFT amélioré...");
+    //const MonanimalNFT = await ethers.getContractFactory("contracts/MonanimalNFT.sol:MonanimalNFT");
     const MonanimalNFT = await ethers.getContractFactory("contracts/MonanimalNFT_Improved.sol:MonanimalNFT");
     const monanimalNFT = await MonanimalNFT.deploy();
     await monanimalNFT.waitForDeployment();

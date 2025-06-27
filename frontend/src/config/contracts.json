@@ -1,19 +1,19 @@
 {
   "contracts": {
     "MonanimalNFT": {
-      "address": "0x5E0516fA8ad865349d89d33E409862DC5DEdfc9d",
+      "address": "0xBC2aD6e68168796781660237A2D92A0B9533FEE0",
       "abi": "MonanimalNFT"
     },
     "WeaponNFT": {
-      "address": "0xEFf169F22D49E20490f099448d61895eBfd5d942",
+      "address": "0x3C644C858c2C1037Fc0979D301Ecda74dB2F7FfC",
       "abi": "WeaponNFT"
     },
     "ArtifactNFT": {
-      "address": "0xaf5c4423a672516fd094b3A00dd7FA825C4c3Dd6",
+      "address": "0x8Fa8071A1380f173B4721C15328c49860EFaa985",
       "abi": "ArtifactNFT"
     },
     "BattleArena": {
-      "address": "0xa92A01AA67186e878b46A182169Fbc895d3dA868",
+      "address": "0xC67E97Af43dF0671648EC2169D6acF15B2b899F2",
       "abi": "BattleArenaOptimized"
     }
   },

@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type {
   BaseContract,
+  BigNumberish,
   BytesLike,
   FunctionFragment,
   Result,
@@ -20,54 +21,29 @@ import type {
 } from "../common";
 
 export interface TestSVGGenerator_ImprovedInterface extends Interface {
-  getFunction(
-    nameOrSignature:
-      | "generateBerserkerSVG"
-      | "generateGuardianSVG"
-      | "generateMageSVG"
-      | "generateTestSVG"
-      | "generateWarriorSVG"
-  ): FunctionFragment;
+  getFunction(nameOrSignature: "generateSVG"): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "generateBerserkerSVG",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "generateGuardianSVG",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "generateMageSVG",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "generateTestSVG",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "generateWarriorSVG",
-    values?: undefined
+    functionFragment: "generateSVG",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      string,
+      BigNumberish,
+      BigNumberish
+    ]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "generateBerserkerSVG",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "generateGuardianSVG",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "generateMageSVG",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "generateTestSVG",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "generateWarriorSVG",
+    functionFragment: "generateSVG",
     data: BytesLike
   ): Result;
 }
@@ -115,35 +91,51 @@ export interface TestSVGGenerator_Improved extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  generateBerserkerSVG: TypedContractMethod<[], [string], "view">;
-
-  generateGuardianSVG: TypedContractMethod<[], [string], "view">;
-
-  generateMageSVG: TypedContractMethod<[], [string], "view">;
-
-  generateTestSVG: TypedContractMethod<[], [string], "view">;
-
-  generateWarriorSVG: TypedContractMethod<[], [string], "view">;
+  generateSVG: TypedContractMethod<
+    [
+      name: string,
+      classType: BigNumberish,
+      rarity: BigNumberish,
+      level: BigNumberish,
+      health: BigNumberish,
+      attack: BigNumberish,
+      defense: BigNumberish,
+      speed: BigNumberish,
+      magic: BigNumberish,
+      luck: BigNumberish,
+      colorScheme: string,
+      wins: BigNumberish,
+      losses: BigNumberish
+    ],
+    [string],
+    "view"
+  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
   ): T;
 
   getFunction(
-    nameOrSignature: "generateBerserkerSVG"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "generateGuardianSVG"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "generateMageSVG"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "generateTestSVG"
-  ): TypedContractMethod<[], [string], "view">;
-  getFunction(
-    nameOrSignature: "generateWarriorSVG"
-  ): TypedContractMethod<[], [string], "view">;
+    nameOrSignature: "generateSVG"
+  ): TypedContractMethod<
+    [
+      name: string,
+      classType: BigNumberish,
+      rarity: BigNumberish,
+      level: BigNumberish,
+      health: BigNumberish,
+      attack: BigNumberish,
+      defense: BigNumberish,
+      speed: BigNumberish,
+      magic: BigNumberish,
+      luck: BigNumberish,
+      colorScheme: string,
+      wins: BigNumberish,
+      losses: BigNumberish
+    ],
+    [string],
+    "view"
+  >;
 
   filters: {};
 }

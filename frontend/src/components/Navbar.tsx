@@ -13,82 +13,171 @@ const Navbar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-      <div className="container-fluid">
-        <Link className="navbar-brand fw-bold" to="/">
-          <i className="fas fa-dragon me-2 text-primary"></i>
-          BrawlNads
-        </Link>
+    <nav className="bg-black/80 backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link className="flex items-center space-x-3 group" to="/">
+            <div className="text-2xl group-hover:animate-pulse">🐉</div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                BRAWLNADS
+              </span>
+              <span className="text-xs text-gray-400 font-mono -mt-1">MONAD EDITION</span>
+            </div>
+          </Link>
 
-        {/* Navigation toujours visible */}
-        <div className="navbar-nav me-auto d-flex flex-row">
-          <Link
-            className={`nav-link me-3 ${isActive('/') ? 'active text-primary' : 'text-light'}`}
-            to="/"
-          >
-            <i className="fas fa-home me-1"></i>
-            Home
-          </Link>
-          <Link
-            className={`nav-link me-3 ${isActive('/collection') ? 'active text-primary' : 'text-light'}`}
-            to="/collection"
-          >
-            <i className="fas fa-dragon me-1"></i>
-            Collection
-          </Link>
-          <Link
-            className={`nav-link me-3 ${isActive('/battle') ? 'active text-primary' : 'text-light'}`}
-            to="/battle"
-          >
-            <i className="fas fa-fist-raised me-1"></i>
-            Battle
-          </Link>
-          <Link
-            className={`nav-link me-3 ${isActive('/leaderboard') ? 'active text-primary' : 'text-light'}`}
-            to="/leaderboard"
-          >
-            <i className="fas fa-trophy me-1"></i>
-            Leaderboard
-          </Link>
-          <Link
-            className={`nav-link me-3 ${isActive('/forge') ? 'active text-primary' : 'text-light'}`}
-            to="/forge"
-          >
-            <i className="fas fa-hammer me-1"></i>
-            Forge
-          </Link>
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-1">
+            <Link
+              to="/"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                isActive('/') 
+                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="mr-2">🏠</span>
+              Home
+            </Link>
+            <Link
+              to="/collection"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                isActive('/collection') 
+                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="mr-2">💎</span>
+              Collection
+            </Link>
+            <Link
+              to="/battle"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                isActive('/battle') 
+                  ? 'bg-red-600/30 text-red-400 border border-red-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="mr-2">⚔️</span>
+              Battle
+            </Link>
+            <Link
+              to="/leaderboard"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                isActive('/leaderboard') 
+                  ? 'bg-yellow-600/30 text-yellow-400 border border-yellow-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="mr-2">🏆</span>
+              Leaderboard
+            </Link>
+            <Link
+              to="/forge"
+              className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                isActive('/forge') 
+                  ? 'bg-orange-600/30 text-orange-400 border border-orange-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <span className="mr-2">🔨</span>
+              Forge
+            </Link>
+          </div>
+
+          {/* Right Side - Network & Wallet */}
+          <div className="flex items-center space-x-4">
+            {/* Network Badge */}
+            <Badge className="bg-blue-600/20 text-blue-400 border-blue-500/30 font-mono text-xs hidden sm:flex">
+              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
+              MONAD TESTNET
+            </Badge>
+
+            {/* Wallet Connection */}
+            {isConnected ? (
+              <div className="flex items-center space-x-3">
+                <Badge className="bg-green-600/20 text-green-400 border-green-500/30 font-mono">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                  {address?.slice(0, 6)}...{address?.slice(-4)}
+                </Badge>
+                <Button
+                  onClick={disconnect}
+                  variant="outline"
+                  size="sm"
+                  className="border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all duration-300"
+                >
+                  <span className="mr-1">🔌</span>
+                  <span className="hidden sm:inline">Disconnect</span>
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={connect}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium transition-all duration-300 transform hover:scale-105"
+              >
+                <span className="mr-2">🚀</span>
+                <span className="hidden sm:inline">Connect Wallet</span>
+                <span className="sm:hidden">Connect</span>
+              </Button>
+            )}
+          </div>
         </div>
 
-        <div className="d-flex align-items-center">
-          <Badge variant="info" className="me-3">
-            <i className="fas fa-network-wired me-1"></i>
-            Monad Testnet
-          </Badge>
-          {isConnected ? (
-            <div className="d-flex align-items-center gap-2">
-              <Badge variant="success">
-                <i className="fas fa-wallet me-1"></i>
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={disconnect}
-              >
-                <i className="fas fa-sign-out-alt me-1"></i>
-                Disconnect
-              </Button>
-            </div>
-          ) : (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={connect}
+        {/* Mobile Navigation */}
+        <div className="md:hidden pb-4">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to="/"
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isActive('/') 
+                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
             >
-              <i className="fas fa-wallet me-1"></i>
-              Connect Wallet
-            </Button>
-          )}
+              🏠 Home
+            </Link>
+            <Link
+              to="/collection"
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isActive('/collection') 
+                  ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              💎 Collection
+            </Link>
+            <Link
+              to="/battle"
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isActive('/battle') 
+                  ? 'bg-red-600/30 text-red-400 border border-red-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              ⚔️ Battle
+            </Link>
+            <Link
+              to="/leaderboard"
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isActive('/leaderboard') 
+                  ? 'bg-yellow-600/30 text-yellow-400 border border-yellow-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              🏆 Leaderboard
+            </Link>
+            <Link
+              to="/forge"
+              className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                isActive('/forge') 
+                  ? 'bg-orange-600/30 text-orange-400 border border-orange-500/50' 
+                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              🔨 Forge
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

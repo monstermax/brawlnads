@@ -1,0 +1,396 @@
+/* Gaming Theme Styles for BrawlNads */
+
+/* Link Styles */
+a {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+/* Better text contrast for cards */
+.card-text-enhanced {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.text-enhanced {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Improved typography */
+.font-gaming {
+  font-family: 'Orbitron', 'Courier New', monospace;
+  letter-spacing: 0.05em;
+}
+
+.text-glow-white {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+}
+
+/* Grid Pattern Background */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Animation Delays */
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* Glow Effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+}
+
+/* Neon Text Effects */
+.neon-text-purple {
+  text-shadow: 
+    0 0 5px rgba(139, 92, 246, 0.8),
+    0 0 10px rgba(139, 92, 246, 0.6),
+    0 0 15px rgba(139, 92, 246, 0.4),
+    0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.neon-text-cyan {
+  text-shadow: 
+    0 0 5px rgba(34, 211, 238, 0.8),
+    0 0 10px rgba(34, 211, 238, 0.6),
+    0 0 15px rgba(34, 211, 238, 0.4),
+    0 0 20px rgba(34, 211, 238, 0.2);
+}
+
+/* Holographic Effect */
+.holographic {
+  background: linear-gradient(
+    45deg,
+    #ff006e,
+    #8338ec,
+    #3a86ff,
+    #06ffa5,
+    #ffbe0b,
+    #fb5607
+  );
+  background-size: 400% 400%;
+  animation: holographic 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes holographic {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Floating Animation */
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Pulse Glow Animation */
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+  }
+}
+
+/* Cyberpunk Border */
+.cyberpunk-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(45deg, #8b5cf6, #06b6d4, #ec4899) border-box;
+  border-radius: 12px;
+}
+
+.cyberpunk-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  padding: 2px;
+  background: linear-gradient(45deg, #8b5cf6, #06b6d4, #ec4899);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Glitch Effect */
+.glitch {
+  position: relative;
+  animation: glitch 2s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff006e;
+  z-index: -1;
+}
+
+.glitch::after {
+  animation: glitch-2 0.5s infinite;
+  color: #06ffa5;
+  z-index: -2;
+}
+
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-1 {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
+
+@keyframes glitch-2 {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(2px, -2px);
+  }
+  40% {
+    transform: translate(2px, 2px);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(-2px, 2px);
+  }
+}
+
+/* Scan Lines Effect */
+.scan-lines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(139, 92, 246, 0.1) 2px,
+    rgba(139, 92, 246, 0.1) 4px
+  );
+  pointer-events: none;
+  animation: scan 2s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Matrix Rain Effect */
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Energy Orb */
+.energy-orb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #06ffa5, #8b5cf6);
+  box-shadow: 
+    0 0 20px #06ffa5,
+    0 0 40px #8b5cf6,
+    0 0 60px #ec4899;
+  animation: energy-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes energy-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Gaming Card Hover Effects */
+.gaming-card {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.gaming-card:hover {
+  transform: translateY(-5px) rotateX(5deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+/* Neon Button */
+.neon-button {
+  position: relative;
+  background: transparent;
+  border: 2px solid #8b5cf6;
+  color: #8b5cf6;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.neon-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.neon-button:hover::before {
+  left: 100%;
+}
+
+.neon-button:hover {
+  color: #fff;
+  box-shadow: 
+    0 0 20px #8b5cf6,
+    inset 0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+/* Loading Spinner */
+.cyber-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 92, 246, 0.3);
+  border-top: 3px solid #8b5cf6;
+  border-radius: 50%;
+  animation: cyber-spin 1s linear infinite;
+}
+
+@keyframes cyber-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .holographic {
+    background-size: 200% 200%;
+  }
+  
+  .gaming-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Dark Mode Enhancements */
+@media (prefers-color-scheme: dark) {
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(139, 92, 246, 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+  }
+}

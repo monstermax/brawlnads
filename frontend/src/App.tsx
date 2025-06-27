@@ -12,6 +12,7 @@ import Leaderboard from './pages/Leaderboard'
 import Forge from './pages/Forge'
 
 import './App.css'
+import './styles/gaming.css'
 
 
 const queryClient = new QueryClient()
@@ -22,9 +23,13 @@ const App: React.FC = () => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <div className="App">
+          <div className="App min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900">
             <Navbar />
-            <main>
+            <main className="relative">
+              {/* Background Effects */}
+              <div className="fixed inset-0 bg-grid-pattern opacity-5 pointer-events-none"></div>
+              <div className="fixed inset-0 scan-lines pointer-events-none"></div>
+              
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/collection" element={<Collection />} />

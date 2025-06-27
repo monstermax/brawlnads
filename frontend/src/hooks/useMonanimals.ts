@@ -8,6 +8,9 @@ import type { Monanimal, UseMonanimalsReturn } from '../types'
 import { createFallbackSVG } from '@/utils/svgUtils'
 
 
+const mintMonanimalGasLimit = 500_000n; // 500k gas limit pour le mint avec SVG complexe
+
+
 export function useMonanimals(): UseMonanimalsReturn {
     const { address } = useAccount()
     const [monanimals, setMonanimals] = useState<Monanimal[]>([])
@@ -183,7 +186,8 @@ export function useMonanimals(): UseMonanimalsReturn {
             })
 
             console.log(`✅ Processed ${processedMonanimals.length} Monanimals successfully`)
-            setMonanimals(processedMonanimals)
+            setMonanimals(processedMonanimals);
+
         } catch (error) {
             console.error('Error processing monanimals:', error)
             setMonanimals([])
@@ -199,7 +203,7 @@ export function useMonanimals(): UseMonanimalsReturn {
                 abi: MONANIMAL_ABI,
                 functionName: 'mint',
                 value: mintPrice,
-                gas: 500_000n, // 500k gas limit pour le mint avec SVG complexe
+                gas: mintMonanimalGasLimit,
             })
         }
     }

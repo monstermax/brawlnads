@@ -1,5 +1,42 @@
 /* Gaming Theme Styles for BrawlNads */
 
+/* Bootstrap/Tailwind Conflict Resolution */
+/* Force Tailwind styles on our custom pages */
+.tailwind-page {
+  /* Reset Bootstrap's box-sizing if needed */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+}
+
+/* Prevent Bootstrap from overriding our custom backgrounds */
+.monad-bg {
+  background: linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%) !important;
+}
+
+/* Ensure our custom buttons don't get Bootstrap styling */
+.custom-btn {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.custom-btn:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Override Bootstrap's default link colors */
+.custom-link {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.custom-link:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
 /* Link Styles */
 a {
   text-decoration: none !important;

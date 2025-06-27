@@ -9,7 +9,6 @@ const Leaderboard: React.FC = () => {
   const { isConnected } = useWallet()
   const { allMonanimals, loading } = useAllMonanimals()
 
-
   // Calculer les statistiques pour le leaderboard
   const getLeaderboardData = () => {
     if (!allMonanimals.length) return []
@@ -43,228 +42,253 @@ const Leaderboard: React.FC = () => {
     }
   }
 
-  const getRankBadgeVariant = (rank: number) => {
+  const getRankBadgeColor = (rank: number) => {
     switch (rank) {
-      case 1: return 'warning' as const
-      case 2: return 'light' as const
-      case 3: return 'dark' as const
-      default: return 'secondary' as const
+      case 1: return 'bg-gradient-to-r from-yellow-500 to-orange-500 text-black'
+      case 2: return 'bg-gradient-to-r from-gray-400 to-gray-500 text-black'
+      case 3: return 'bg-gradient-to-r from-orange-600 to-yellow-600 text-black'
+      default: return 'bg-gray-600/50 text-gray-300'
     }
   }
 
   const getRarityColor = (rarity: string) => {
     switch (rarity.toLowerCase()) {
-      case 'mythic': return 'text-danger'
-      case 'legendary': return 'text-warning'
-      case 'epic': return 'text-primary'
-      case 'rare': return 'text-info'
-      case 'uncommon': return 'text-success'
-      default: return 'text-muted'
+      case 'mythic': return 'text-purple-400'
+      case 'legendary': return 'text-yellow-400'
+      case 'epic': return 'text-blue-400'
+      case 'rare': return 'text-green-400'
+      case 'uncommon': return 'text-cyan-400'
+      default: return 'text-gray-400'
     }
   }
 
   return (
-    <div className="container-fluid py-4">
-      <div className="row">
-        <div className="col-12">
-          {/* Header */}
-          <div className="text-center mb-5">
-            <h1 className="text-white mb-3">
-              <i className="fas fa-trophy me-3 text-warning"></i>
-              Leaderboard
-            </h1>
-            <p className="text-muted lead">
-              Les meilleurs combattants de BrawlNads
-            </p>
-            
-          </div>
+    <div className="min-h-screen relative overflow-hidden tailwind-page monad-bg">
+      {/* Monad Background Effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse" style={{ backgroundColor: '#836EF9' }}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse animation-delay-2000" style={{ backgroundColor: '#A0055D' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-8 animate-pulse animation-delay-4000" style={{ backgroundColor: '#200052' }}></div>
+      </div>
 
-          {/* Stats globales */}
-          <div className="row mb-5">
-            <div className="col-md-3 col-sm-6 mb-3">
-              <div className="card bg-dark text-white h-100">
-                <div className="card-body text-center">
-                  <i className="fas fa-users fa-2x text-primary mb-3"></i>
-                  <h5 className="card-title">Total Fighters</h5>
-                  <h3 className="text-primary">{loading ? '...' : allMonanimals.length}</h3>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-sm-6 mb-3">
-              <div className="card bg-dark text-white h-100">
-                <div className="card-body text-center">
-                  <i className="fas fa-fist-raised fa-2x text-danger mb-3"></i>
-                  <h5 className="card-title">Active Fighters</h5>
-                  <h3 className="text-danger">
-                    {loading ? '...' : allMonanimals.filter(m => !m.isKO).length}
-                  </h3>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-sm-6 mb-3">
-              <div className="card bg-dark text-white h-100">
-                <div className="card-body text-center">
-                  <i className="fas fa-fire fa-2x text-warning mb-3"></i>
-                  <h5 className="card-title">Total Battles</h5>
-                  <h3 className="text-warning">
-                    {loading ? '...' : leaderboardData.reduce((total, m) => total + m.totalBattles, 0)}
-                  </h3>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-sm-6 mb-3">
-              <div className="card bg-dark text-white h-100">
-                <div className="card-body text-center">
-                  <i className="fas fa-crown fa-2x text-success mb-3"></i>
-                  <h5 className="card-title">Champion</h5>
-                  <h6 className="text-success">
-                    {loading ? '...' : leaderboardData.length > 0 ? leaderboardData[0].name : 'Aucun'}
-                  </h6>
-                </div>
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl gaming-title mb-4">
+            🏆 LEADERBOARD
+          </h1>
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <div className="h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent flex-1 max-w-xs"></div>
+            <span className="text-yellow-400 text-sm font-mono tracking-widest">HALL OF CHAMPIONS</span>
+            <div className="h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent flex-1 max-w-xs"></div>
+          </div>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            Les meilleurs combattants de l'univers BrawlNads
+          </p>
+        </div>
+
+        {/* Global Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 hover:border-purple-400/50 transition-all duration-300 group">
+            <div className="text-center">
+              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👥</div>
+              <h3 className="text-purple-300 font-semibold mb-2 text-enhanced">TOTAL FIGHTERS</h3>
+              <div className="text-3xl font-bold text-white text-enhanced">
+                {loading ? (
+                  <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
+                ) : (
+                  allMonanimals.length
+                )}
               </div>
             </div>
           </div>
 
-          {/* Leaderboard */}
-          <div className="card bg-dark text-white">
-            <div className="card-header">
-              <h5 className="mb-0">
-                <i className="fas fa-list-ol me-2"></i>
-                Classement des Fighters
-              </h5>
+          <div className="bg-black/60 backdrop-blur-md border border-red-500/30 rounded-2xl p-6 hover:border-red-400/50 transition-all duration-300 group">
+            <div className="text-center">
+              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">⚔️</div>
+              <h3 className="text-red-300 font-semibold mb-2 text-enhanced">ACTIVE FIGHTERS</h3>
+              <div className="text-3xl font-bold text-white text-enhanced">
+                {loading ? (
+                  <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
+                ) : (
+                  allMonanimals.filter(m => !m.isKO).length
+                )}
+              </div>
             </div>
-            <div className="card-body p-0">
-              {loading ? (
-                <div className="text-center py-5">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <p className="text-muted mt-3">Chargement du leaderboard...</p>
-                </div>
-              ) : leaderboardData.length === 0 ? (
-                <div className="text-center py-5">
-                  <i className="fas fa-exclamation-triangle fa-3x text-muted mb-3"></i>
-                  <h5 className="text-muted">Aucun combat enregistré</h5>
-                  <p className="text-muted">
-                    Les fighters apparaîtront ici après leurs premiers combats
-                  </p>
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-dark table-hover mb-0">
-                    <thead>
-                      <tr>
-                        <th>Rang</th>
-                        <th>Fighter</th>
-                        <th>Classe</th>
-                        <th>Rareté</th>
-                        <th>Level</th>
-                        <th>Victoires</th>
-                        <th>Défaites</th>
-                        <th>Taux de victoire</th>
-                        <th>Score</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {leaderboardData.map((monanimal, index) => (
-                        <tr key={monanimal.id} className={index < 3 ? 'table-warning' : ''}>
-                          <td>
-                            <Badge variant={getRankBadgeVariant(index + 1)}>
-                              {getRankIcon(index + 1)}
-                            </Badge>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <img 
-                                src={monanimal.image} 
-                                alt={monanimal.name}
-                                className="rounded me-2"
-                                style={{ width: '32px', height: '32px' }}
+          </div>
+
+          <div className="bg-black/60 backdrop-blur-md border border-orange-500/30 rounded-2xl p-6 hover:border-orange-400/50 transition-all duration-300 group">
+            <div className="text-center">
+              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">🔥</div>
+              <h3 className="text-orange-300 font-semibold mb-2 text-enhanced">TOTAL BATTLES</h3>
+              <div className="text-3xl font-bold text-white text-enhanced">
+                {loading ? (
+                  <div className="animate-pulse bg-gray-600 h-8 w-16 mx-auto rounded"></div>
+                ) : (
+                  leaderboardData.reduce((total, m) => total + m.totalBattles, 0)
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-black/60 backdrop-blur-md border border-green-500/30 rounded-2xl p-6 hover:border-green-400/50 transition-all duration-300 group">
+            <div className="text-center">
+              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👑</div>
+              <h3 className="text-green-300 font-semibold mb-2 text-enhanced">CHAMPION</h3>
+              <div className="text-lg font-bold text-white text-enhanced">
+                {loading ? (
+                  <div className="animate-pulse bg-gray-600 h-6 w-20 mx-auto rounded"></div>
+                ) : (
+                  leaderboardData.length > 0 ? leaderboardData[0].name : 'Aucun'
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Leaderboard Table */}
+        <div className="bg-black/60 backdrop-blur-md border border-yellow-500/30 rounded-3xl overflow-hidden">
+          <div className="bg-black/40 border-b border-yellow-500/30 p-6">
+            <h2 className="text-2xl font-bold text-yellow-400 font-mono text-enhanced">
+              📊 CLASSEMENT DES FIGHTERS
+            </h2>
+          </div>
+
+          <div className="p-6">
+            {loading ? (
+              <div className="text-center py-20">
+                <div className="cyber-spinner mx-auto mb-6"></div>
+                <h3 className="text-2xl font-bold text-white mb-2">Loading Leaderboard...</h3>
+                <p className="text-gray-300">Scanning battle records...</p>
+              </div>
+            ) : leaderboardData.length === 0 ? (
+              <div className="text-center py-20">
+                <div className="text-8xl mb-8">⚠️</div>
+                <h2 className="text-4xl font-bold text-white mb-4 gaming-subtitle">No Battles Recorded</h2>
+                <p className="text-gray-300 text-lg">
+                  Fighters will appear here after their first battles
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-600">
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">RANK</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">FIGHTER</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">CLASS</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">RARITY</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">LVL</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">WINS</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">LOSSES</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">WIN RATE</th>
+                      <th className="text-left py-4 px-2 text-yellow-400 font-mono text-sm">SCORE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {leaderboardData.map((monanimal, index) => (
+                      <tr 
+                        key={monanimal.id} 
+                        className={`border-b border-gray-700/50 hover:bg-white/5 transition-colors ${
+                          index < 3 ? 'bg-yellow-500/10' : ''
+                        }`}
+                      >
+                        <td className="py-4 px-2">
+                          <Badge className={`${getRankBadgeColor(index + 1)} font-bold text-sm`}>
+                            {getRankIcon(index + 1)}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-2">
+                          <div className="flex items-center gap-3">
+                            <div 
+                              className="w-10 h-10 rounded-lg bg-gray-600 flex-shrink-0"
+                              style={{ 
+                                backgroundImage: `url(${monanimal.image})`,
+                                backgroundSize: 'contain',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center'
+                              }}
+                            />
+                            <div>
+                              <div className="text-white font-bold text-enhanced">{monanimal.name}</div>
+                              <div className="text-gray-400 text-sm">#{monanimal.id}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-2">
+                          <Badge className="bg-cyan-600/20 text-cyan-400 border-cyan-500/30 text-xs">
+                            {monanimal.class}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-2">
+                          <span className={`${getRarityColor(monanimal.rarity)} font-semibold text-enhanced`}>
+                            {monanimal.rarity}
+                          </span>
+                        </td>
+                        <td className="py-4 px-2">
+                          <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/30 text-xs">
+                            {monanimal.level}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-2">
+                          <span className="text-green-400 font-bold text-enhanced">
+                            🏆 {monanimal.wins}
+                          </span>
+                        </td>
+                        <td className="py-4 px-2">
+                          <span className="text-red-400 font-bold text-enhanced">
+                            ❌ {monanimal.losses}
+                          </span>
+                        </td>
+                        <td className="py-4 px-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-16 h-2 bg-gray-700 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full transition-all duration-300 ${
+                                  monanimal.winRate >= 70 ? 'bg-green-500' : 
+                                  monanimal.winRate >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                }`}
+                                style={{ width: `${monanimal.winRate}%` }}
                               />
-                              <div>
-                                <div className="fw-bold">{monanimal.name}</div>
-                                <small className="text-muted">#{monanimal.id}</small>
-                              </div>
                             </div>
-                          </td>
-                          <td>
-                            <Badge variant="info">{monanimal.class}</Badge>
-                          </td>
-                          <td>
-                            <span className={getRarityColor(monanimal.rarity)}>
-                              {monanimal.rarity}
-                            </span>
-                          </td>
-                          <td>
-                            <Badge variant="primary">{monanimal.level}</Badge>
-                          </td>
-                          <td>
-                            <span className="text-success fw-bold">
-                              <i className="fas fa-trophy me-1"></i>
-                              {monanimal.wins}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-danger">
-                              <i className="fas fa-times me-1"></i>
-                              {monanimal.losses}
-                            </span>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <div className="progress me-2" style={{ width: '60px', height: '8px' }}>
-                                <div 
-                                  className={`progress-bar ${monanimal.winRate >= 70 ? 'bg-success' : monanimal.winRate >= 50 ? 'bg-warning' : 'bg-danger'}`}
-                                  style={{ width: `${monanimal.winRate}%` }}
-                                ></div>
-                              </div>
-                              <span className="small">{monanimal.winRate}%</span>
-                            </div>
-                          </td>
-                          <td>
-                            <span className={`fw-bold ${monanimal.score > 0 ? 'text-success' : monanimal.score < 0 ? 'text-danger' : 'text-muted'}`}>
-                              {monanimal.score > 0 ? '+' : ''}{monanimal.score}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
+                            <span className="text-white text-sm font-mono text-enhanced">{monanimal.winRate}%</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-2">
+                          <span className={`font-bold text-enhanced ${
+                            monanimal.score > 0 ? 'text-green-400' : 
+                            monanimal.score < 0 ? 'text-red-400' : 'text-gray-400'
+                          }`}>
+                            {monanimal.score > 0 ? '+' : ''}{monanimal.score}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* Légende du système de score */}
-          <div className="row mt-4">
-            <div className="col-12">
-              <div className="card bg-secondary">
-                <div className="card-body">
-                  <h6 className="card-title">
-                    <i className="fas fa-info-circle me-2"></i>
-                    Système de Score
-                  </h6>
-                  <div className="row">
-                    <div className="col-md-4">
-                      <small className="text-success">
-                        <i className="fas fa-plus me-1"></i>
-                        <strong>+3 points</strong> par victoire
-                      </small>
-                    </div>
-                    <div className="col-md-4">
-                      <small className="text-danger">
-                        <i className="fas fa-minus me-1"></i>
-                        <strong>-1 point</strong> par défaite
-                      </small>
-                    </div>
-                    <div className="col-md-4">
-                      <small className="text-info">
-                        <i className="fas fa-sort me-1"></i>
-                        Classement par <strong>Score → Taux de victoire → Victoires</strong>
-                      </small>
-                    </div>
-                  </div>
-                </div>
+        {/* Score System Legend */}
+        <div className="mt-8">
+          <div className="bg-black/60 backdrop-blur-md border border-gray-500/30 rounded-2xl p-6">
+            <h3 className="text-xl font-bold text-gray-300 mb-4 font-mono text-enhanced">
+              ℹ️ SCORING SYSTEM
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-green-400 font-bold text-enhanced">+3 points</span>
+                <span className="text-gray-300">per victory</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-red-400 font-bold text-enhanced">-1 point</span>
+                <span className="text-gray-300">per defeat</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-cyan-400 font-bold text-enhanced">Ranking:</span>
+                <span className="text-gray-300">Score → Win Rate → Wins</span>
               </div>
             </div>
           </div>

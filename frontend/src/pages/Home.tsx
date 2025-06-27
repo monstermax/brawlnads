@@ -10,7 +10,7 @@ const Home: React.FC = () => {
     const { monanimals, loading, mint, isMinting, mintPrice } = useMonanimals()
 
     return (
-        <div className="min-h-screen relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0E100F 0%, #200052 50%, #0E100F 100%)' }}>
+        <div className="min-h-screen relative overflow-hidden tailwind-page monad-bg">
             {/* Monad-themed Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-pulse" style={{ backgroundColor: '#836EF9' }}></div>
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
                         <div className="space-y-6">
                             <div className="bg-black/30 backdrop-blur-md border border-purple-500/30 rounded-2xl p-8 max-w-md mx-auto">
                                 <div className="text-purple-400 text-4xl mb-4">🔗</div>
-                                <h3 className="text-2xl font-bold text-white mb-4">Connect to the Metaverse</h3>
+                                <h3 className="text-2xl font-bold text-white mb-4">Enter the arena</h3>
                                 <p className="text-gray-400 mb-6">Link your wallet to start your legendary journey</p>
                                 <Button
                                     onClick={connect}
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
                                 <Button
                                     onClick={mint}
                                     disabled={isMinting}
-                                    className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-yellow-600 hover:to-purple-600 text-black font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isMinting ? (
                                         <>
@@ -175,7 +175,7 @@ const Home: React.FC = () => {
                             </h2>
                             <p className="text-gray-400">Choose your path to glory</p>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <Link to="/battle" className="group">
                                 <div className="bg-gradient-to-br from-red-600/20 to-orange-600/20 border border-red-500/30 rounded-2xl p-6 hover:border-red-400/50 transition-all duration-300 transform hover:scale-105">

@@ -41,12 +41,13 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
 
   if (loading) {
     return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">Chargement des adversaires...</h5>
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+      <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl p-6">
+        <h3 className="gaming-title text-xl mb-4">Chargement des adversaires...</h3>
+        <div className="flex items-center justify-center py-8">
+          <svg className="animate-spin h-8 w-8 text-[#836EF9]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
         </div>
       </div>
     )
@@ -54,102 +55,104 @@ export function OpponentSelector({ onSelectOpponent, userMonanimals, selectedFig
 
   if (availableOpponents.length === 0) {
     return (
-      <div className="card">
-        <div className="card-body">
-          <h5 className="card-title">Aucun adversaire disponible</h5>
-          <p className="card-text">
-            Il n'y a actuellement aucun Monanimal disponible pour combattre.
-            Essayez de minter plus de Monanimals ou attendez que d'autres joueurs en créent.
-          </p>
-        </div>
+      <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl p-6">
+        <h3 className="gaming-title text-xl mb-4">Aucun adversaire disponible</h3>
+        <p className="text-gray-300">
+          Il n'y a actuellement aucun Monanimal disponible pour combattre.
+          Essayez de minter plus de Monanimals ou attendez que d'autres joueurs en créent.
+        </p>
       </div>
     )
   }
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <h5 className="card-title">Choisir un adversaire</h5>
-        <p className="card-text">
-          {availableOpponents.length} adversaire{availableOpponents.length > 1 ? 's' : ''} disponible{availableOpponents.length > 1 ? 's' : ''}
-        </p>
+    <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl p-6">
+      <h3 className="gaming-title text-xl mb-2">Choisir un adversaire</h3>
+      <p className="text-gray-300 mb-6">
+        {availableOpponents.length} adversaire{availableOpponents.length > 1 ? 's' : ''} disponible{availableOpponents.length > 1 ? 's' : ''}
+      </p>
+      
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        <button
+          className="bg-gradient-to-r from-[#836EF9] to-[#A0055D] hover:from-[#A0055D] hover:to-[#836EF9] text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#836EF9]/25"
+          onClick={getRandomOpponent}
+        >
+          🎲 Adversaire aléatoire
+        </button>
         
-        <div className="mb-3">
-          <button 
-            className="btn btn-primary me-2"
-            onClick={getRandomOpponent}
-          >
-            🎲 Adversaire aléatoire
-          </button>
-          
-          {selectedOpponent && (
-            <span className="badge bg-success">
-              Adversaire sélectionné: {selectedOpponent.name}
-            </span>
-          )}
-        </div>
-
-        <div className="row">
-          {availableOpponents.slice(0, 6).map((opponent) => (
-            <div key={opponent.id} className="col-md-4 mb-3">
-              <div 
-                className={`card h-100 ${selectedOpponent?.id === opponent.id ? 'border-primary' : ''}`}
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleSelectOpponent(opponent)}
-              >
-                <img 
-                  src={opponent.image} 
-                  className="card-img-top" 
-                  alt={opponent.name}
-                  style={{ height: '150px', objectFit: 'cover' }}
-                />
-                <div className="card-body p-2">
-                  <h6 className="card-title mb-1">{opponent.name}</h6>
-                  <div className="d-flex justify-content-between">
-                    <small className="text-muted">Lvl {opponent.level}</small>
-                    <small className="text-muted">{opponent.class}</small>
-                  </div>
-                  <div className="row text-center mt-2">
-                    <div className="col-4">
-                      <small className="text-danger">❤️ {opponent.health}</small>
-                    </div>
-                    <div className="col-4">
-                      <small className="text-warning">⚔️ {opponent.attack}</small>
-                    </div>
-                    <div className="col-4">
-                      <small className="text-info">🛡️ {opponent.defense}</small>
-                    </div>
-                  </div>
-                  <div className="row text-center">
-                    <div className="col-4">
-                      <small className="text-success">💨 {opponent.speed}</small>
-                    </div>
-                    <div className="col-4">
-                      <small className="text-primary">✨ {opponent.magic}</small>
-                    </div>
-                    <div className="col-4">
-                      <small className="text-secondary">🍀 {opponent.luck}</small>
-                    </div>
-                  </div>
-                  {selectedOpponent?.id === opponent.id && (
-                    <div className="mt-2">
-                      <span className="badge bg-primary w-100">Sélectionné</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {availableOpponents.length > 6 && (
-          <div className="text-center mt-3">
-            <small className="text-muted">
-              Et {availableOpponents.length - 6} autre{availableOpponents.length - 6 > 1 ? 's' : ''} adversaire{availableOpponents.length - 6 > 1 ? 's' : ''}...
-            </small>
+        {selectedOpponent && (
+          <div className="bg-green-500/20 border border-green-500/30 text-green-400 px-4 py-2 rounded-lg">
+            Adversaire sélectionné: <span className="font-bold text-white">{selectedOpponent.name}</span>
           </div>
         )}
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {availableOpponents.slice(0, 6).map((opponent) => (
+          <div
+            key={opponent.id}
+            className={`bg-black/40 backdrop-blur-md border rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+              selectedOpponent?.id === opponent.id
+                ? 'border-[#836EF9] shadow-lg shadow-[#836EF9]/25'
+                : 'border-gray-700/50 hover:border-[#836EF9]/50'
+            }`}
+            onClick={() => handleSelectOpponent(opponent)}
+          >
+            <div className="aspect-square overflow-hidden">
+              <img
+                src={opponent.image}
+                alt={opponent.name}
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+              />
+            </div>
+            <div className="p-3">
+              <h4 className="font-bold text-white mb-2">{opponent.name}</h4>
+              <div className="flex justify-between text-sm text-gray-400 mb-3">
+                <span>Lvl {opponent.level}</span>
+                <span>{opponent.class}</span>
+              </div>
+              
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="text-center">
+                  <div className="text-red-400">❤️ {opponent.health}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-orange-400">⚔️ {opponent.attack}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-blue-400">🛡️ {opponent.defense}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-green-400">💨 {opponent.speed}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-purple-400">✨ {opponent.magic}</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-yellow-400">🍀 {opponent.luck}</div>
+                </div>
+              </div>
+              
+              {selectedOpponent?.id === opponent.id && (
+                <div className="mt-3">
+                  <div className="bg-[#836EF9] text-white text-center py-1 rounded-lg text-sm font-semibold">
+                    Sélectionné
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {availableOpponents.length > 6 && (
+        <div className="text-center mt-6">
+          <p className="text-gray-400 text-sm">
+            Et {availableOpponents.length - 6} autre{availableOpponents.length - 6 > 1 ? 's' : ''} adversaire{availableOpponents.length - 6 > 1 ? 's' : ''}...
+          </p>
+        </div>
+      )}
     </div>
   )
 }

@@ -11,7 +11,7 @@ import BattleArena from './pages/BattleArena'
 import Leaderboard from './pages/Leaderboard'
 import Forge from './pages/Forge'
 
-import './App.css'
+import './styles/App.css'
 import './styles/gaming.css'
 
 

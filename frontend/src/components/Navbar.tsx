@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-black/80 backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 text-white">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link className="flex items-center space-x-3 group" to="/">
@@ -34,7 +34,7 @@ const Navbar: React.FC = () => {
               className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/') 
                   ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <span className="mr-2">🏠</span>
@@ -45,7 +45,7 @@ const Navbar: React.FC = () => {
               className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
                 isActive('/collection') 
                   ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <span className="mr-2">💎</span>
@@ -54,9 +54,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/battle"
               className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
-                isActive('/battle') 
-                  ? 'bg-red-600/40 text-red-300 border border-red-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                isActive('/battle')
+                  ? 'bg-red-600/40 text-red-300 border border-red-400/60'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <span className="mr-2">⚔️</span>
@@ -65,9 +65,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/leaderboard"
               className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
-                isActive('/leaderboard') 
-                  ? 'bg-yellow-600/40 text-yellow-300 border border-yellow-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                isActive('/leaderboard')
+                  ? 'bg-yellow-600/40 text-yellow-300 border border-yellow-400/60'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <span className="mr-2">🏆</span>
@@ -76,9 +76,9 @@ const Navbar: React.FC = () => {
             <Link
               to="/forge"
               className={`px-4 py-2 rounded font-medium transition-all duration-300 ${
-                isActive('/forge') 
-                  ? 'bg-orange-600/40 text-orange-300 border border-orange-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                isActive('/forge')
+                  ? 'bg-orange-600/40 text-orange-300 border border-orange-400/60'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               <span className="mr-2">🔨</span>
@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
               className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/') 
                   ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               🏠 Home
@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
               className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/collection') 
                   ? 'bg-purple-600/40 text-purple-300 border border-purple-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               💎 Collection
@@ -152,7 +152,7 @@ const Navbar: React.FC = () => {
               className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/battle') 
                   ? 'bg-red-600/40 text-red-300 border border-red-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               ⚔️ Battle
@@ -162,7 +162,7 @@ const Navbar: React.FC = () => {
               className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/leaderboard') 
                   ? 'bg-yellow-600/40 text-yellow-300 border border-yellow-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               🏆 Leaderboard
@@ -172,7 +172,7 @@ const Navbar: React.FC = () => {
               className={`px-3 py-1 rounded text-sm font-medium transition-all duration-300 ${
                 isActive('/forge') 
                   ? 'bg-orange-600/40 text-orange-300 border border-orange-400/60' 
-                  : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
               🔨 Forge

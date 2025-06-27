@@ -150,7 +150,7 @@ const Leaderboard: React.FC = () => {
         <div className="bg-black/60 backdrop-blur-md border border-yellow-500/30 rounded-3xl overflow-hidden">
           <div className="bg-black/40 border-b border-yellow-500/30 p-6">
             <h2 className="text-2xl font-bold text-yellow-400 font-mono text-enhanced">
-              📊 CLASSEMENT DES FIGHTERS
+              📊 FIGHTERS LEADERBOARD
             </h2>
           </div>
 

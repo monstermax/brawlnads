@@ -25,113 +25,82 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
 
   const MonanimalBattleCard = ({ monanimal, isWinner, isLoser }: { monanimal: any, isWinner: boolean, isLoser: boolean }) => {
     return (
-      <div className="flex justify-center mb-4 px-2">
+      <div className="flex justify-center mb-2 px-1">
         <div className={`
-          relative bg-gradient-to-br from-black/80 to-black/60 backdrop-blur-md rounded-xl overflow-hidden
-          transition-all duration-300 max-w-sm w-full
-          ${isWinner ? 'border-2 border-yellow-400 shadow-2xl shadow-yellow-400/50 scale-105' : ''}
-          ${isLoser ? 'border border-gray-600 opacity-60 scale-95' : ''}
+          relative bg-gradient-to-br from-black/80 to-black/60 backdrop-blur-md rounded-lg overflow-hidden
+          transition-all duration-300 w-full max-w-[200px]
+          ${isWinner ? 'border-2 border-yellow-400 shadow-lg shadow-yellow-400/50' : ''}
+          ${isLoser ? 'border border-gray-600 opacity-70' : ''}
           ${!isWinner && !isLoser ? 'border border-gray-700/50' : ''}
         `}>
-          {/* Winner overlay */}
+          {/* Winner crown */}
           {isWinner && (
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-white/5 pointer-events-none rounded-xl" />
-          )}
-          
-          {/* Crown for winner */}
-          {isWinner && (
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10 text-3xl animate-bounce">
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 z-10 text-lg">
               👑
             </div>
           )}
 
           {/* Header */}
-          <div className="flex justify-between items-center p-4 border-b border-gray-700/50">
-            <div>
-              <h3 className={`font-bold ${isLoser ? 'text-gray-400' : 'text-white'}`}>
-                {monanimal.name || `Monanimal #${monanimal.id}`}
-              </h3>
-              <p className="text-gray-400 text-sm">
-                Level {monanimal.level || 1} {monanimal.class || 'Fighter'}
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
+          <div className="p-2 border-b border-gray-700/50">
+            <h3 className={`font-bold text-sm text-center ${isLoser ? 'text-gray-400' : 'text-white'}`}>
+              {monanimal.name || `Monanimal #${monanimal.id}`}
+            </h3>
+            <p className="text-gray-400 text-xs text-center">
+              Lvl {monanimal.level || 1} {monanimal.class || 'Fighter'}
+            </p>
+            <div className="flex justify-center mt-1">
               {isWinner && (
-                <Badge variant="warning" className="winner-badge">
-                  <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732L14.146 12.8l-1.179 4.456a1 1 0 01-1.934 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732L9.854 7.2l1.179-4.456A1 1 0 0112 2z" clipRule="evenodd" />
-                  </svg>
+                <Badge variant="warning" className="text-xs px-1 py-0">
                   WINNER
                 </Badge>
               )}
               {isLoser && (
-                <Badge variant="secondary">
-                  <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
+                <Badge variant="secondary" className="text-xs px-1 py-0">
                   DEFEATED
                 </Badge>
               )}
-              <Badge variant={getRarityVariant(monanimal.rarity || 'Common')}>
-                {monanimal.rarity || 'Common'}
-              </Badge>
             </div>
           </div>
           
           {/* NFT Image */}
           <div className="p-2">
             <div className={`
-              flex items-center justify-center h-40 rounded-lg relative overflow-visible
+              flex items-center justify-center h-20 rounded relative overflow-hidden
               ${isLoser ? 'bg-gray-800/20' : 'bg-gray-700/30'}
             `}>
               {monanimal.image ? (
-                <div
-                  className={`w-36 h-36 bg-contain bg-no-repeat bg-center ${isLoser ? 'filter grayscale brightness-50' : ''}`}
-                  style={{
-                    backgroundImage: `url(${monanimal.image})`,
+                <img
+                  src={monanimal.image}
+                  alt={monanimal.name || `Monanimal #${monanimal.id}`}
+                  className={`w-16 h-16 object-contain rounded ${isLoser ? 'filter grayscale brightness-50' : ''}`}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'block';
                   }}
                 />
-              ) : (
-                <div className={`text-center ${isLoser ? 'text-gray-400' : 'text-white'}`}>
-                  <div className={`text-5xl ${isWinner ? 'animate-pulse' : ''}`}>
-                    🐾
-                  </div>
-                  <p className="text-xs mt-1">Monanimal #{monanimal.id}</p>
-                </div>
-              )}
+              ) : null}
               
-              {/* Winner glow effect */}
-              {isWinner && (
-                <div className="absolute inset-0 bg-gradient-radial from-yellow-400/15 via-transparent to-transparent rounded-lg animate-pulse pointer-events-none" />
-              )}
+              {/* Fallback content */}
+              <div
+                className={`text-center ${isLoser ? 'text-gray-400' : 'text-white'} ${monanimal.image ? 'hidden' : 'block'}`}
+                style={{ display: monanimal.image ? 'none' : 'block' }}
+              >
+                <div className="text-2xl">🐾</div>
+                <p className="text-xs">#{monanimal.id}</p>
+              </div>
             </div>
 
-            {/* Stats Card */}
-            <div className={`
-              mt-2 rounded-lg p-3 border
-              ${isWinner ? 'bg-yellow-400/5 border-yellow-400/30' : ''}
-              ${isLoser ? 'bg-gray-800/20 border-gray-600' : ''}
-              ${!isWinner && !isLoser ? 'bg-white/5 border-white/20' : ''}
-            `}>
-              <h4 className={`text-center font-bold mb-2 ${isLoser ? 'text-gray-400' : 'text-white'}`}>
-                {monanimal.name || `Monanimal #${monanimal.id}`}
-              </h4>
-              <p className="text-center text-xs text-gray-400 mb-2">
-                Level {monanimal.level || 1} {monanimal.class || 'Fighter'} | {monanimal.rarity || 'Common'}
-              </p>
-              
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className={`text-center ${isLoser ? 'text-gray-400' : 'text-gray-200'}`}>
-                  HP: {monanimal.health || 100} | ATK: {monanimal.attack || 50}
-                </div>
-                <div className={`text-center ${isLoser ? 'text-gray-400' : 'text-gray-200'}`}>
-                  DEF: {monanimal.defense || 30} | SPD: {monanimal.speed || 40}
-                </div>
+            {/* Compact Stats */}
+            <div className="mt-1 text-xs text-center">
+              <div className={`${isLoser ? 'text-gray-400' : 'text-gray-200'}`}>
+                HP: {monanimal.health || 100} | ATK: {monanimal.attack || 50}
               </div>
-              
-              {/* Win/Loss Record */}
-              <div className="flex justify-between mt-2 text-xs">
+              <div className={`${isLoser ? 'text-gray-400' : 'text-gray-200'}`}>
+                DEF: {monanimal.defense || 30} | SPD: {monanimal.speed || 40}
+              </div>
+              <div className="flex justify-between mt-1">
                 <span className={isLoser ? 'text-gray-400' : 'text-green-400'}>
                   Wins: {monanimal.wins || 0}
                 </span>
@@ -164,60 +133,60 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
         `}
       </style>
       
-      <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden">
+      <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-2">
+        <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-[#836EF9]/20">
-            <h2 className="gaming-title text-2xl flex items-center">
-              <svg className="w-8 h-8 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+          <div className="flex items-center justify-between p-3 border-b border-[#836EF9]/20">
+            <h2 className="gaming-title text-lg flex items-center">
+              <svg className="w-6 h-6 text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V7l-7-5z" clipRule="evenodd" />
               </svg>
               Battle Results
             </h2>
             <button
               type="button"
-              className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg"
+              className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-white/10 rounded-lg"
               onClick={onClose}
               aria-label="Close"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
           
-          <div className="p-6 max-h-[80vh] overflow-y-auto">
+          <div className="p-3 max-h-[70vh] overflow-y-auto">
             {/* Battle Result Header */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-4">
               <div className={`
-                rounded-xl p-6 border-2
+                rounded-lg p-3 border
                 ${won === true ? 'bg-green-500/10 border-green-500/30' : ''}
                 ${won === false ? 'bg-red-500/10 border-red-500/30' : ''}
                 ${won === null ? 'bg-blue-500/10 border-blue-500/30' : ''}
               `}>
-                <h3 className={`text-3xl font-bold mb-3 flex items-center justify-center
+                <h3 className={`text-xl font-bold mb-2 flex items-center justify-center
                   ${won === true ? 'text-green-400' : ''}
                   ${won === false ? 'text-red-400' : ''}
                   ${won === null ? 'text-blue-400' : ''}
                 `}>
                   {won === true && (
-                    <svg className="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V7l-7-5z" clipRule="evenodd" />
                     </svg>
                   )}
                   {won === false && (
-                    <svg className="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                   )}
                   {won === null && (
-                    <svg className="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                   )}
                   {won === true ? 'VICTORY!' : won === false ? 'DEFEAT!' : 'BATTLE COMPLETED!'}
                 </h3>
-                <p className="text-white text-lg">{message}</p>
+                <p className="text-white text-sm">{message}</p>
               </div>
             </div>
 
@@ -230,7 +199,7 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
                   </h3>
                 </div>
                 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 relative">
                   <MonanimalBattleCard 
                     monanimal={winner} 
                     isWinner={true} 
@@ -244,7 +213,7 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
                   
                   {/* VS divider */}
                   <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 hidden lg:block">
-                    <div className="bg-gradient-to-r from-[#836EF9] to-[#A0055D] text-white text-4xl font-bold px-4 py-2 rounded-full shadow-lg shadow-[#836EF9]/50">
+                    <div className="text-white text-4xl font-bold px-4 py-2">
                       VS
                     </div>
                   </div>
@@ -311,16 +280,16 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
           </div>
           
           {/* Footer */}
-          <div className="p-6 border-t border-[#836EF9]/20 bg-black/20">
+          <div className="p-3 border-t border-[#836EF9]/20 bg-black/20">
             <Button
               variant="primary"
               onClick={onClose}
-              className="w-full"
-              style={{ 
-                background: won === true 
-                  ? 'linear-gradient(45deg, #10b981, #059669)' 
-                  : won === false 
-                  ? 'linear-gradient(45deg, #ef4444, #dc2626)' 
+              className="w-full py-2"
+              style={{
+                background: won === true
+                  ? 'linear-gradient(45deg, #10b981, #059669)'
+                  : won === false
+                  ? 'linear-gradient(45deg, #ef4444, #dc2626)'
                   : 'linear-gradient(45deg, #836EF9, #A0055D)',
                 border: 'none'
               }}

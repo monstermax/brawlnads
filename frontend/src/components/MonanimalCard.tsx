@@ -38,7 +38,7 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
         }
       case 'Rare': 
         return { 
-          color: 'from-green-500 to-blue-500', 
+          color: 'from-pink-500 to-orange-500', 
           border: 'border-green-500/50',
           glow: 'shadow-green-500/25',
           emoji: '💚'
@@ -111,7 +111,7 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
   return (
     <div
       className={`
-        relative bg-black/60 backdrop-blur-md border rounded-2xl overflow-hidden cursor-pointer
+        relative bg-black/60 backdrop-blur-md border rounded-2xl overflow-hidden cursor-default
         transition-all duration-300 transform hover:scale-105 hover:shadow-2xl
         ${isSelected ? 'border-cyan-400 shadow-cyan-400/50' : rarityConfig.border}
         ${monanimal.isKO ? 'border-red-500/50 opacity-75' : ''}
@@ -122,7 +122,7 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
     >
       {/* Rarity Glow Effect */}
       <div className={`absolute inset-0 bg-gradient-to-br ${rarityConfig.color} opacity-5 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none -z-10`}></div>
-      
+
       {/* Header */}
       <div className="relative p-4 border-b border-white/10">
         <div className="flex justify-between items-start">
@@ -138,16 +138,16 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
               </span>
             </div>
           </div>
-          
+
           <div className="flex flex-col gap-2 items-end">
+            <Badge className={`bg-gradient-to-r ${rarityConfig.color} text-white border-0 text-xs font-bold`}>
+              {rarityConfig.emoji} {monanimal.rarity}
+            </Badge>
             {monanimal.isKO && (
               <Badge className="bg-red-600/20 text-red-400 border-red-500/30 text-xs">
                 💀 KO
               </Badge>
             )}
-            <Badge className={`bg-gradient-to-r ${rarityConfig.color} text-white border-0 text-xs font-bold`}>
-              {rarityConfig.emoji} {monanimal.rarity}
-            </Badge>
           </div>
         </div>
       </div>
@@ -233,23 +233,23 @@ const MonanimalCard: React.FC<MonanimalCardProps> = ({
             {monanimal.isKO ? (
               <button
                 onClick={handleHeal}
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-2 rounded-lg transition-all duration-300 px-4"
+                className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-2 rounded-lg transition-all duration-300 px-4 cursor-pointer"
               >
                 <span className="mr-2">💚</span>
-                HEAL (0.005 ETH)
+                HEAL (0.005 MON)
               </button>
             ) : (
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={handleEquip}
-                  className="px-4 py-2 border border-purple-500/50 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 rounded-lg font-semibold"
+                  className="px-4 py-2 border border-purple-500/50 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 rounded-lg font-semibold cursor-pointer"
                 >
                   <span className="mr-1">⚙️</span>
                   EQUIP
                 </button>
                 <button
                   onClick={handleBattle}
-                  className="px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold transition-all duration-300 rounded-lg"
+                  className="px-4 py-2 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white font-bold transition-all duration-300 rounded-lg cursor-pointer"
                 >
                   <span className="mr-1">⚔️</span>
                   BATTLE

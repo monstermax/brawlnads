@@ -99,7 +99,7 @@ const Collection: React.FC = () => {
           <Button
             onClick={mint}
             disabled={isMinting}
-            className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25"
           >
             {isMinting ? (
               <>

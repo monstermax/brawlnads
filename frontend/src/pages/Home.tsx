@@ -75,7 +75,7 @@ const Home: React.FC = () => {
                                 <Button
                                     onClick={mint}
                                     disabled={isMinting}
-                                    className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-yellow-600 hover:to-purple-600 text-black font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-yellow-600 hover:to-purple-600 text-black font-bold py-4 px-8 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-yellow-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isMinting ? (
                                         <>

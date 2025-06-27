@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useReadContract, useReadContracts } from 'wagmi'
 import { CONTRACT_ADDRESSES, MONANIMAL_ABI } from '../config/web3'
 import type { Monanimal } from '../types'
+import { createFallbackSVG } from '@/utils/svgUtils'
 
 export function useAllMonanimals() {
   const [allMonanimals, setAllMonanimals] = useState<Monanimal[]>([])
@@ -22,9 +23,25 @@ export function useAllMonanimals() {
     args: [BigInt(i)],
   })) : []
 
+  // Préparer les appels pour lire tous les tokenURI
+  const allTokenURIContracts = totalSupply ? Array.from({ length: Number(totalSupply) }, (_, i) => ({
+    address: CONTRACT_ADDRESSES.MonanimalNFT,
+    abi: MONANIMAL_ABI,
+    functionName: 'tokenURI',
+    args: [BigInt(i)],
+  })) : []
+
   // Lire tous les Monanimals en une seule fois
   const { data: allMonanimalData, error: allMonanimalError } = useReadContracts({
     contracts: allMonanimalContracts,
+    query: {
+      enabled: !!totalSupply && Number(totalSupply) > 0,
+    },
+  })
+
+  // Lire tous les tokenURI en une seule fois
+  const { data: allTokenURIData, error: allTokenURIError } = useReadContracts({
+    contracts: allTokenURIContracts,
     query: {
       enabled: !!totalSupply && Number(totalSupply) > 0,
     },
@@ -39,7 +56,7 @@ export function useAllMonanimals() {
       return
     }
 
-    if (!allMonanimalData) {
+    if (!allMonanimalData || !allTokenURIData) {
       setLoading(true)
       return
     }
@@ -55,11 +72,36 @@ export function useAllMonanimals() {
         if (result.status === 'success' && result.result) {
           const tokenId = index
           const data = result.result as any
+          const tokenURIResult = allTokenURIData[index]
           
           // Mapper les classes et raretés
           const classNames = ['Warrior', 'Assassin', 'Mage', 'Berserker', 'Guardian']
           const rarityNames = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic']
           
+          // Extraire l'image du tokenURI on-chain (VOS vrais SVG)
+          let imageUrl = ''
+          if (tokenURIResult?.status === 'success' && tokenURIResult.result) {
+            try {
+              // Le tokenURI est un data URI JSON contenant les métadonnées
+              const tokenURI = String(tokenURIResult.result)
+              if (tokenURI.startsWith('data:application/json;base64,')) {
+                const jsonData = atob(tokenURI.replace('data:application/json;base64,', ''))
+                const metadata = JSON.parse(jsonData)
+                imageUrl = metadata.image || ''
+                console.log(`🎨 SVG on-chain récupéré pour Monanimal #${tokenId}`)
+              }
+            } catch (error) {
+              console.error(`Erreur lors de l'extraction du SVG pour le token ${tokenId}:`, error)
+            }
+          }
+
+          // Fallback vers SVG par défaut si pas de SVG on-chain
+          if (!imageUrl) {
+            console.warn(`⚠️ Pas de SVG on-chain pour le token ${tokenId}, utilisation du fallback`);
+
+            imageUrl = createFallbackSVG(tokenId, data.class)
+          }
+
           const monanimal: Monanimal = {
             id: tokenId,
             name: data.name,
@@ -74,26 +116,8 @@ export function useAllMonanimals() {
             luck: Number(data.stats.luck),
             wins: Number(data.wins),
             losses: Number(data.losses),
-            isKO: Boolean(data.isKO), // Lire le vrai statut KO depuis le contrat !
-            image: `data:image/svg+xml;base64,${btoa(`
-              <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="bg${tokenId}" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#836EF9;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#200052;stop-opacity:1" />
-                  </linearGradient>
-                </defs>
-                <rect width="200" height="200" fill="url(#bg${tokenId})"/>
-                <circle cx="100" cy="80" r="30" fill="#FFFFFF" opacity="0.9"/>
-                <circle cx="85" cy="75" r="8" fill="#000"/>
-                <circle cx="115" cy="75" r="8" fill="#000"/>
-                <circle cx="87" cy="73" r="2" fill="#FFF"/>
-                <circle cx="117" cy="73" r="2" fill="#FFF"/>
-                <ellipse cx="100" cy="120" rx="40" ry="30" fill="#A0055D" opacity="0.8"/>
-                <text x="100" y="160" text-anchor="middle" fill="white" font-size="12">${classNames[data.class]}</text>
-                <text x="100" y="175" text-anchor="middle" fill="#836EF9" font-size="10">#${tokenId}</text>
-              </svg>
-            `)}`
+            isKO: Boolean(data.isKO),
+            image: imageUrl
           }
           
           processedMonanimals.push(monanimal)
@@ -110,7 +134,7 @@ export function useAllMonanimals() {
     }
     
     setLoading(false)
-  }, [totalSupply, allMonanimalData])
+  }, [totalSupply, allMonanimalData, allTokenURIData])
 
   return {
     allMonanimals,

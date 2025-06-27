@@ -83,7 +83,7 @@ const Leaderboard: React.FC = () => {
             <div className="h-px bg-gradient-to-r from-transparent via-yellow-400 to-transparent flex-1 max-w-xs"></div>
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Les meilleurs combattants de l'univers BrawlNads
+            The best fighters in the BrawlNads universe
           </p>
         </div>
 
@@ -200,15 +200,17 @@ const Leaderboard: React.FC = () => {
                         </td>
                         <td className="py-4 px-2">
                           <div className="flex items-center gap-3">
-                            <div 
-                              className="w-10 h-10 rounded-lg bg-gray-600 flex-shrink-0"
-                              style={{ 
-                                backgroundImage: `url(${monanimal.image})`,
-                                backgroundSize: 'contain',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'center'
-                              }}
-                            />
+                            <div className="w-10 h-10 rounded-lg bg-gray-800/50 border border-gray-600/50 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                              {monanimal.image ? (
+                                <img
+                                  src={monanimal.image}
+                                  alt={monanimal.name}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <div className="text-gray-400 text-xs">🐾</div>
+                              )}
+                            </div>
                             <div>
                               <div className="text-white font-bold text-enhanced">{monanimal.name}</div>
                               <div className="text-gray-400 text-sm">#{monanimal.id}</div>

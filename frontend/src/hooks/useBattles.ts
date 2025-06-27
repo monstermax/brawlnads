@@ -338,7 +338,7 @@ export function useBattles(userMonanimals: Monanimal[] = []): UseBattlesReturn {
                 functionName: 'createDuel',
                 args: [BigInt(monanimalId), BigInt(opponentId)],
                 value: duelFee,
-                gas: BigInt(2_500_000), // Limite de gas plus élevée pour éviter les "out of gas"
+                gas: BigInt(900_000), // Limite de gas plus élevée pour éviter les "out of gas"
             })
 
             console.log('✅ createDuel function called successfully')

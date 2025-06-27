@@ -70,6 +70,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MonanimalNFT__factory>;
     getContractFactory(
+      name: "MonanimalNFT",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MonanimalNFT__factory>;
+    getContractFactory(
+      name: "TestSVGGenerator_Improved",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TestSVGGenerator_Improved__factory>;
+    getContractFactory(
+      name: "TestSVGGenerator",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TestSVGGenerator__factory>;
+    getContractFactory(
       name: "WeaponNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.WeaponNFT__factory>;
@@ -145,6 +157,21 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.MonanimalNFT>;
     getContractAt(
+      name: "MonanimalNFT",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MonanimalNFT>;
+    getContractAt(
+      name: "TestSVGGenerator_Improved",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TestSVGGenerator_Improved>;
+    getContractAt(
+      name: "TestSVGGenerator",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.TestSVGGenerator>;
+    getContractAt(
       name: "WeaponNFT",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -207,6 +234,18 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MonanimalNFT>;
     deployContract(
+      name: "MonanimalNFT",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MonanimalNFT>;
+    deployContract(
+      name: "TestSVGGenerator_Improved",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TestSVGGenerator_Improved>;
+    deployContract(
+      name: "TestSVGGenerator",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TestSVGGenerator>;
+    deployContract(
       name: "WeaponNFT",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.WeaponNFT>;
@@ -281,6 +320,21 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MonanimalNFT>;
+    deployContract(
+      name: "MonanimalNFT",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.MonanimalNFT>;
+    deployContract(
+      name: "TestSVGGenerator_Improved",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TestSVGGenerator_Improved>;
+    deployContract(
+      name: "TestSVGGenerator",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.TestSVGGenerator>;
     deployContract(
       name: "WeaponNFT",
       args: any[],

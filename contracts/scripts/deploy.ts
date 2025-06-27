@@ -29,7 +29,7 @@ async function main() {
 
     // Charger la configuration existante si elle existe
     let existingConfig: any = {};
-    const configPath = path.join(__dirname, "../frontend/src/config/contracts.json");
+    const configPath = path.join(__dirname, "../../frontend/src/config/contracts.json");
     
     try {
         if (fs.existsSync(configPath)) {
@@ -194,7 +194,7 @@ async function main() {
         }
     };
 
-    const frontendConfigFile = path.join(__dirname, "../frontend/src/config/contracts.json");
+    const frontendConfigFile = path.join(__dirname, "../../frontend/src/config/contracts.json");
     const frontendConfigDir = path.dirname(frontendConfigFile);
 
     if (!fs.existsSync(frontendConfigDir)) {
@@ -247,6 +247,7 @@ async function deployArtifactNFT() {
 async function deployBattleArena(monanimalAddress: string, weaponAddress: string, artifactAddress: string) {
     // Déployer BattleArenaOptimized
     console.log("\n⚔️ Déploiement de BattleArenaOptimized...");
+    //const BattleArenaOptimized = await ethers.getContractFactory("BattleArena");
     const BattleArenaOptimized = await ethers.getContractFactory("BattleArenaOptimized");
     const battleArena = await BattleArenaOptimized.deploy(monanimalAddress, weaponAddress, artifactAddress);
     await battleArena.waitForDeployment();
@@ -257,13 +258,13 @@ async function deployBattleArena(monanimalAddress: string, weaponAddress: string
 
 
 async function deployMonanimalNFT() {
-    // Déployer MonanimalNFT
-    console.log("\n📦 Déploiement de MonanimalNFT...");
-    const MonanimalNFT = await ethers.getContractFactory("contracts/MonanimalNFT_Updated.sol:MonanimalNFT");
+    // Déployer MonanimalNFT avec le générateur SVG amélioré
+    console.log("\n📦 Déploiement de MonanimalNFT amélioré...");
+    const MonanimalNFT = await ethers.getContractFactory("contracts/MonanimalNFT_Improved.sol:MonanimalNFT");
     const monanimalNFT = await MonanimalNFT.deploy();
     await monanimalNFT.waitForDeployment();
     const monanimalAddress = await monanimalNFT.getAddress();
-    console.log("✅ MonanimalNFT déployé à:", monanimalAddress);
+    console.log("✅ MonanimalNFT amélioré déployé à:", monanimalAddress);
     return { address: monanimalAddress, contract: monanimalNFT };
 }
 

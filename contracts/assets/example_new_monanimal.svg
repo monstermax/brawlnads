@@ -1,0 +1,82 @@
+<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Filtre de classe Assassin (violet foncé) -->
+    <filter id="classFilter">
+      <feColorMatrix type="matrix" values="0.9 0 0.2 0 0  0 0.7 0.3 0 0  0.1 0 1.1 0 0  0 0 0 1 0"/>
+    </filter>
+    
+    <!-- Effet de lueur pour rareté Mythic -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Effet scintillant pour Mythic -->
+    <filter id="sparkle">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Corps de base du Monanimal avec filtres appliqués -->
+  <g filter="url(#glow)">
+    <g filter="url(#classFilter)">
+      <!-- Partie principale du corps (simplifié du SVG original) -->
+      <path d="M400 200 C450 180 500 200 550 250 C580 300 570 400 550 450 C500 500 450 480 400 450 C350 400 360 300 400 200 Z" fill="#6E4AD8" stroke="#010002" stroke-width="3"/>
+      
+      <!-- Tête -->
+      <circle cx="450" cy="150" r="80" fill="#6C49D8" stroke="#010002" stroke-width="3"/>
+      
+      <!-- Yeux -->
+      <circle cx="430" cy="140" r="12" fill="#FFFFFF"/>
+      <circle cx="470" cy="140" r="12" fill="#FFFFFF"/>
+      <circle cx="430" cy="140" r="8" fill="#010002"/>
+      <circle cx="470" cy="140" r="8" fill="#010002"/>
+      
+      <!-- Bouche -->
+      <path d="M 420 170 L 480 170" stroke="#010002" stroke-width="3" fill="none"/>
+      
+      <!-- Bras -->
+      <ellipse cx="350" cy="280" rx="25" ry="60" fill="#6C49D8" stroke="#010002" stroke-width="2"/>
+      <ellipse cx="550" cy="280" rx="25" ry="60" fill="#6C49D8" stroke="#010002" stroke-width="2"/>
+      
+      <!-- Jambes -->
+      <ellipse cx="420" cy="520" rx="30" ry="80" fill="#6C49D8" stroke="#010002" stroke-width="2"/>
+      <ellipse cx="480" cy="520" rx="30" ry="80" fill="#6C49D8" stroke="#010002" stroke-width="2"/>
+    </g>
+  </g>
+  
+  <!-- Overlay de classe Assassin - Capuche -->
+  <path d="M 350 100 Q 450 50 550 100 L 550 200 Q 450 150 350 200 Z" fill="#200052" stroke="#010002" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Effets de rareté Mythic - Particules scintillantes -->
+  <g filter="url(#sparkle)">
+    <circle cx="300" cy="300" r="4" fill="#FFD700" opacity="0.8">
+      <animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="200" r="3" fill="#FFD700" opacity="0.6">
+      <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="350" cy="500" r="5" fill="#FFD700" opacity="0.7">
+      <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="550" cy="400" r="2" fill="#FFD700" opacity="0.5">
+      <animate attributeName="opacity" values="0;1;0" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Panneau d'informations -->
+  <rect x="20" y="850" width="984" height="150" fill="#0E100F" fill-opacity="0.9" rx="10"/>
+  <text x="40" y="890" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="bold">Shadow Assassin</text>
+  <text x="40" y="920" fill="#836EF9" font-family="Arial, sans-serif" font-size="20">Level 20 | Assassin | Mythic</text>
+  <text x="40" y="950" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18">HP:140 ATK:150 DEF:80</text>
+  <text x="40" y="980" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18">SPD:140 MAG:90 LCK:95</text>
+  <text x="700" y="950" fill="#A0055D" font-family="Arial, sans-serif" font-size="18">Wins: 25</text>
+  <text x="700" y="980" fill="#A0055D" font-family="Arial, sans-serif" font-size="18">Losses: 1</text>
+</svg>

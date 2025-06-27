@@ -2,6 +2,8 @@ import { createConfig, http } from 'wagmi'
 import { defineChain } from 'viem'
 import { injected, metaMask } from 'wagmi/connectors'
 
+import contractsJson from './contracts.json';
+
 
 // Configuration de la chaîne Monad Testnet
 export const monadTestnet = defineChain({
@@ -42,10 +44,10 @@ export const config = createConfig({
 
 // Adresses des contrats déployés sur Monad Testnet
 export const CONTRACT_ADDRESSES = {
-    MonanimalNFT: '0x283d26C980bA801D6b6d60261ED1978c88A51a53',
-    WeaponNFT: '0x4dDC57e24c47bcD964cb8fa237b25Ea0eC6fF54B',
-    ArtifactNFT: '0xa3265F9381d09896996d24c841206b730e2fa6d3',
-    BattleArena: '0xC21b1904850e47bF3E95D92C1Af7a162942d7b37',
+    MonanimalNFT: contractsJson.contracts.MonanimalNFT.address as `0x${string}`,
+    WeaponNFT: contractsJson.contracts.WeaponNFT.address as `0x${string}`,
+    ArtifactNFT: contractsJson.contracts.ArtifactNFT.address as `0x${string}`,
+    BattleArena: contractsJson.contracts.BattleArena.address as `0x${string}`,
 } as const;
 
 

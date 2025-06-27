@@ -25,12 +25,10 @@ library MonanimalSVGGenerator {
 
     function generateSVG(SVGParams memory params) internal pure returns (string memory) {
         return string(abi.encodePacked(
-            '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
+            '<svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">',
             _generateDefs(params),
-            _generateBackground(params),
-            _generateBody(params),
-            _generateFace(params),
-            _generateClassAccessories(params),
+            _generateBaseMonanimal(params),
+            _generateClassOverlay(params),
             _generateRarityEffects(params),
             _generateStats(params),
             '</svg>'
@@ -40,75 +38,59 @@ library MonanimalSVGGenerator {
     function _generateDefs(SVGParams memory params) internal pure returns (string memory) {
         return string(abi.encodePacked(
             '<defs>',
-            _getColorGradients(params.colorScheme),
+            _getClassColorFilters(params.class),
             _getRarityFilters(params.rarity),
             _getAnimations(params.rarity),
             '</defs>'
         ));
     }
 
-    function _getColorGradients(string memory colorScheme) internal pure returns (string memory) {
-        if (keccak256(bytes(colorScheme)) == keccak256(bytes("purple-blue"))) {
+    function _getClassColorFilters(uint256 class) internal pure returns (string memory) {
+        if (class == 0) { // Warrior - Rouge
             return string(abi.encodePacked(
-                '<linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" stop-color="#836EF9"/>',
-                '<stop offset="100%" stop-color="#200052"/>',
-                '</linearGradient>',
-                '<radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">',
-                '<stop offset="0%" stop-color="#836EF9" stop-opacity="0.3"/>',
-                '<stop offset="100%" stop-color="#200052" stop-opacity="0.1"/>',
-                '</radialGradient>'
+                '<filter id="classFilter">',
+                '<feColorMatrix type="matrix" values="1.2 0 0 0 0.1  0 0.8 0 0 0  0 0 0.8 0 0  0 0 0 1 0"/>',
+                '</filter>'
             ));
-        } else if (keccak256(bytes(colorScheme)) == keccak256(bytes("purple-berry"))) {
+        } else if (class == 1) { // Assassin - Violet foncé
             return string(abi.encodePacked(
-                '<linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" stop-color="#836EF9"/>',
-                '<stop offset="100%" stop-color="#A0055D"/>',
-                '</linearGradient>',
-                '<radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">',
-                '<stop offset="0%" stop-color="#836EF9" stop-opacity="0.3"/>',
-                '<stop offset="100%" stop-color="#A0055D" stop-opacity="0.1"/>',
-                '</radialGradient>'
+                '<filter id="classFilter">',
+                '<feColorMatrix type="matrix" values="0.9 0 0.2 0 0  0 0.7 0.3 0 0  0.1 0 1.1 0 0  0 0 0 1 0"/>',
+                '</filter>'
             ));
-        } else if (keccak256(bytes(colorScheme)) == keccak256(bytes("cosmic-purple"))) {
+        } else if (class == 2) { // Mage - Bleu
             return string(abi.encodePacked(
-                '<linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">',
-                '<stop offset="0%" stop-color="#836EF9"/>',
-                '<stop offset="50%" stop-color="#A0055D"/>',
-                '<stop offset="100%" stop-color="#200052"/>',
-                '</linearGradient>',
-                '<radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">',
-                '<stop offset="0%" stop-color="#836EF9" stop-opacity="0.4"/>',
-                '<stop offset="100%" stop-color="#0E100F" stop-opacity="0.2"/>',
-                '</radialGradient>'
+                '<filter id="classFilter">',
+                '<feColorMatrix type="matrix" values="0.8 0 0 0 0  0 0.9 0.1 0 0  0.2 0.1 1.2 0 0  0 0 0 1 0"/>',
+                '</filter>'
+            ));
+        } else if (class == 3) { // Berserker - Orange/Rouge
+            return string(abi.encodePacked(
+                '<filter id="classFilter">',
+                '<feColorMatrix type="matrix" values="1.3 0.1 0 0 0.1  0.1 1.0 0 0 0  0 0 0.7 0 0  0 0 0 1 0"/>',
+                '</filter>'
+            ));
+        } else { // Guardian - Vert
+            return string(abi.encodePacked(
+                '<filter id="classFilter">',
+                '<feColorMatrix type="matrix" values="0.8 0 0 0 0  0.1 1.2 0.1 0 0  0 0.1 0.9 0 0  0 0 0 1 0"/>',
+                '</filter>'
             ));
         }
-        
-        // Default purple gradient
-        return string(abi.encodePacked(
-            '<linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">',
-            '<stop offset="0%" stop-color="#836EF9"/>',
-            '<stop offset="100%" stop-color="#200052"/>',
-            '</linearGradient>',
-            '<radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">',
-            '<stop offset="0%" stop-color="#836EF9" stop-opacity="0.2"/>',
-            '<stop offset="100%" stop-color="#FBFAF9" stop-opacity="0.1"/>',
-            '</radialGradient>'
-        ));
     }
 
     function _getRarityFilters(uint256 rarity) internal pure returns (string memory) {
         if (rarity >= 4) { // Legendary or Mythic
             return string(abi.encodePacked(
                 '<filter id="glow" x="-50%" y="-50%" width="200%" height="200%">',
-                '<feGaussianBlur stdDeviation="4" result="coloredBlur"/>',
+                '<feGaussianBlur stdDeviation="8" result="coloredBlur"/>',
                 '<feMerge>',
                 '<feMergeNode in="coloredBlur"/>',
                 '<feMergeNode in="SourceGraphic"/>',
                 '</feMerge>',
                 '</filter>',
                 '<filter id="sparkle">',
-                '<feGaussianBlur stdDeviation="2" result="coloredBlur"/>',
+                '<feGaussianBlur stdDeviation="4" result="coloredBlur"/>',
                 '<feMerge>',
                 '<feMergeNode in="coloredBlur"/>',
                 '<feMergeNode in="SourceGraphic"/>',
@@ -116,7 +98,7 @@ library MonanimalSVGGenerator {
                 '</filter>'
             ));
         } else if (rarity >= 2) { // Rare or Epic
-            return '<filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+            return '<filter id="glow"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
         }
         return '';
     }
@@ -124,7 +106,7 @@ library MonanimalSVGGenerator {
     function _getAnimations(uint256 rarity) internal pure returns (string memory) {
         if (rarity == 5) { // Mythic
             return string(abi.encodePacked(
-                '<animateTransform id="rotate" attributeName="transform" type="rotate" values="0 200 200;360 200 200" dur="20s" repeatCount="indefinite"/>',
+                '<animateTransform id="rotate" attributeName="transform" type="rotate" values="0 512 512;360 512 512" dur="20s" repeatCount="indefinite"/>',
                 '<animate id="pulse" attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite"/>'
             ));
         } else if (rarity == 4) { // Legendary
@@ -133,140 +115,57 @@ library MonanimalSVGGenerator {
         return '';
     }
 
-    function _generateBackground(SVGParams memory params) internal pure returns (string memory) {
-        return string(abi.encodePacked(
-            '<rect width="400" height="400" fill="url(#bgGradient)"/>',
-            _generateBackgroundElements(params.rarity)
-        ));
-    }
-
-    function _generateBackgroundElements(uint256 rarity) internal pure returns (string memory) {
-        if (rarity >= 4) {
-            return string(abi.encodePacked(
-                '<circle cx="80" cy="80" r="3" fill="#836EF9" opacity="0.6">',
-                '<animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>',
-                '</circle>',
-                '<circle cx="320" cy="120" r="2" fill="#A0055D" opacity="0.5">',
-                '<animate attributeName="opacity" values="0.2;0.7;0.2" dur="3s" repeatCount="indefinite"/>',
-                '</circle>',
-                '<circle cx="350" cy="300" r="4" fill="#836EF9" opacity="0.4">',
-                '<animate attributeName="opacity" values="0.1;0.6;0.1" dur="2.5s" repeatCount="indefinite"/>',
-                '</circle>'
-            ));
+    function _generateBaseMonanimal(SVGParams memory params) internal pure returns (string memory) {
+        string memory combinedFilter;
+        if (params.rarity >= 2) {
+            combinedFilter = ' filter="url(#classFilter) url(#glow)"';
+        } else {
+            combinedFilter = ' filter="url(#classFilter)"';
         }
-        return '';
-    }
-
-    function _generateBody(SVGParams memory params) internal pure returns (string memory) {
-        string memory bodyShape = _getBodyShape(params.class);
-        string memory filter = params.rarity >= 2 ? ' filter="url(#glow)"' : '';
         
         return string(abi.encodePacked(
-            '<g', filter, '>',
-            bodyShape,
+            '<g', combinedFilter, '>',
+            _getBaseSVGPaths(),
             '</g>'
         ));
     }
 
-    function _getBodyShape(uint256 class) internal pure returns (string memory) {
-        if (class == 0) { // Warrior - Robust body
-            return string(abi.encodePacked(
-                '<ellipse cx="200" cy="220" rx="70" ry="60" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>',
-                '<ellipse cx="200" cy="200" rx="65" ry="55" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>'
-            ));
-        } else if (class == 1) { // Assassin - Sleek body
-            return string(abi.encodePacked(
-                '<ellipse cx="200" cy="210" rx="60" ry="65" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>',
-                '<ellipse cx="200" cy="190" rx="55" ry="60" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>'
-            ));
-        } else if (class == 2) { // Mage - Mystical body
-            return string(abi.encodePacked(
-                '<circle cx="200" cy="210" r="65" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>',
-                '<circle cx="200" cy="190" r="60" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>'
-            ));
-        } else if (class == 3) { // Berserker - Wild body
-            return string(abi.encodePacked(
-                '<ellipse cx="200" cy="220" rx="75" ry="55" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>',
-                '<ellipse cx="200" cy="200" rx="70" ry="50" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>'
-            ));
-        } else { // Guardian - Sturdy body
-            return string(abi.encodePacked(
-                '<rect x="130" y="160" width="140" height="120" rx="20" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>',
-                '<rect x="135" y="140" width="130" height="110" rx="15" fill="url(#bodyGradient)" stroke="#0E100F" stroke-width="3"/>'
-            ));
-        }
-    }
-
-    function _generateFace(SVGParams memory params) internal pure returns (string memory) {
+    function _getBaseSVGPaths() internal pure returns (string memory) {
+        // Retourne le SVG de base (version simplifiée pour éviter les limites de taille)
         return string(abi.encodePacked(
-            _generateEyes(params),
-            _generateMouth(params),
-            _generateNose(params)
+            '<path d="M0 0 C4.32593566 3.56889692 6.2500764 7.18937072 7.875 12.4375 C8.24117432 13.58085815 8.24117432 13.58085815 8.61474609 14.74731445 C14.74395673 34.6412124 19.04590533 55.40681458 22 76 C22.22429687 77.50796143 22.22429687 77.50796143 22.453125 79.04638672 C27.85720865 116.83420869 25.59140701 155.26437362 21 193" fill="#010002" transform="translate(718,37)"/>',
+            '<path d="M0 0 C12.77069955 7.7613174 12.77069955 7.7613174 14.3203125 12.41015625 C13.19753906 13.05082031 12.07476562 13.69148438 10.91796875 14.3515625" fill="#6E4AD8" transform="translate(708,59)"/>',
+            '<path d="M0 0 C0.91612061 0.40379883 1.83224121 0.80759766 2.77612305 1.22363281 C11.58186303 5.24709717 19.30281729 10.27148892 26.9375 16.1875" fill="#6C49D8" transform="translate(690.0625,507.8125)"/>',
+            '<path d="M0 0 C0.62132812 0.49113281 1.24265625 0.98226562 1.8828125 1.48828125 C8.96785655 6.50584658 17.58815869 9.10478388 25.81640625 11.6796875" fill="#CF33C0" transform="translate(407.9921875,753.19921875)"/>'
         ));
     }
 
-    function _generateEyes(SVGParams memory params) internal pure returns (string memory) {
-        string memory eyeAnimation = params.rarity >= 4 ? '<animate attributeName="r" values="15;17;15" dur="3s" repeatCount="indefinite"/>' : '';
-        
-        return string(abi.encodePacked(
-            // Left eye
-            '<circle cx="175" cy="170" r="15" fill="#FFFFFF" stroke="#0E100F" stroke-width="2">',
-            eyeAnimation,
-            '</circle>',
-            '<circle cx="175" cy="170" r="10" fill="#0E100F"/>',
-            '<circle cx="177" cy="167" r="3" fill="#FFFFFF"/>',
-            // Right eye
-            '<circle cx="225" cy="170" r="15" fill="#FFFFFF" stroke="#0E100F" stroke-width="2">',
-            eyeAnimation,
-            '</circle>',
-            '<circle cx="225" cy="170" r="10" fill="#0E100F"/>',
-            '<circle cx="227" cy="167" r="3" fill="#FFFFFF"/>'
-        ));
-    }
-
-    function _generateMouth(SVGParams memory params) internal pure returns (string memory) {
-        if (params.class == 3) { // Berserker - Angry mouth
-            return '<path d="M 180 200 Q 200 210 220 200" stroke="#0E100F" stroke-width="3" fill="none"/>';
-        } else if (params.class == 1) { // Assassin - Mysterious mouth
-            return '<line x1="185" y1="200" x2="215" y2="200" stroke="#0E100F" stroke-width="2"/>';
-        } else { // Default friendly mouth
-            return '<path d="M 180 200 Q 200 190 220 200" stroke="#0E100F" stroke-width="2" fill="none"/>';
-        }
-    }
-
-    function _generateNose(SVGParams memory params) internal pure returns (string memory) {
-        return string(abi.encodePacked(
-            '<ellipse cx="195" cy="185" rx="2" ry="1" fill="#0E100F"/>',
-            '<ellipse cx="205" cy="185" rx="2" ry="1" fill="#0E100F"/>'
-        ));
-    }
-
-    function _generateClassAccessories(SVGParams memory params) internal pure returns (string memory) {
-        if (params.class == 0) { // Warrior
+    function _generateClassOverlay(SVGParams memory params) internal pure returns (string memory) {
+        if (params.class == 0) { // Warrior - Épée
             return string(abi.encodePacked(
-                '<rect x="190" y="120" width="20" height="40" fill="#A0A0A0" stroke="#0E100F" stroke-width="2"/>',
-                '<rect x="185" y="140" width="30" height="10" fill="#8B4513" stroke="#0E100F" stroke-width="1"/>'
+                '<rect x="480" y="200" width="40" height="200" fill="#C0C0C0" stroke="#000" stroke-width="4" transform="rotate(15 500 300)"/>',
+                '<rect x="470" y="180" width="60" height="40" fill="#8B4513" stroke="#000" stroke-width="2" transform="rotate(15 500 200)"/>'
             ));
-        } else if (params.class == 1) { // Assassin
+        } else if (params.class == 1) { // Assassin - Capuche
             return string(abi.encodePacked(
-                '<path d="M 160 140 Q 200 120 240 140 L 240 180 Q 200 160 160 180 Z" fill="#200052" stroke="#0E100F" stroke-width="2" opacity="0.8"/>'
+                '<path d="M 400 100 Q 512 50 624 100 L 624 300 Q 512 250 400 300 Z" fill="#200052" stroke="#000" stroke-width="4" opacity="0.8"/>'
             ));
-        } else if (params.class == 2) { // Mage
+        } else if (params.class == 2) { // Mage - Chapeau
             return string(abi.encodePacked(
-                '<polygon points="200,100 180,140 220,140" fill="#836EF9" stroke="#0E100F" stroke-width="2"/>',
-                '<circle cx="190" cy="130" r="3" fill="#FFD700"/>',
-                '<circle cx="210" cy="130" r="3" fill="#FFD700"/>',
-                '<circle cx="200" cy="120" r="3" fill="#FFD700"/>'
+                '<polygon points="512,150 450,250 574,250" fill="#836EF9" stroke="#000" stroke-width="4"/>',
+                '<circle cx="480" cy="230" r="8" fill="#FFD700"/>',
+                '<circle cx="544" cy="230" r="8" fill="#FFD700"/>',
+                '<circle cx="512" cy="200" r="8" fill="#FFD700"/>'
             ));
-        } else if (params.class == 3) { // Berserker
+        } else if (params.class == 3) { // Berserker - Cornes
             return string(abi.encodePacked(
-                '<path d="M 170 140 L 180 120 L 190 140" stroke="#A0055D" stroke-width="3" fill="none"/>',
-                '<path d="M 210 140 L 220 120 L 230 140" stroke="#A0055D" stroke-width="3" fill="none"/>'
+                '<path d="M 450 200 L 470 150 L 490 200" stroke="#A0055D" stroke-width="8" fill="none"/>',
+                '<path d="M 534 200 L 554 150 L 574 200" stroke="#A0055D" stroke-width="8" fill="none"/>'
             ));
-        } else { // Guardian
+        } else { // Guardian - Bouclier
             return string(abi.encodePacked(
-                '<rect x="170" y="130" width="60" height="20" fill="#C0C0C0" stroke="#0E100F" stroke-width="2"/>',
-                '<circle cx="200" cy="140" r="8" fill="#836EF9" stroke="#0E100F" stroke-width="1"/>'
+                '<rect x="400" y="250" width="120" height="80" fill="#C0C0C0" stroke="#000" stroke-width="4"/>',
+                '<circle cx="460" cy="290" r="20" fill="#836EF9" stroke="#000" stroke-width="2"/>'
             ));
         }
     }
@@ -274,22 +173,22 @@ library MonanimalSVGGenerator {
     function _generateRarityEffects(SVGParams memory params) internal pure returns (string memory) {
         if (params.rarity == 5) { // Mythic
             return string(abi.encodePacked(
-                '<g filter="url(#sparkle)">',
-                '<circle cx="150" cy="150" r="2" fill="#FFD700" opacity="0.8">',
+                '<g>',
+                '<circle cx="300" cy="300" r="4" fill="#FFD700" opacity="0.8">',
                 '<animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite"/>',
                 '</circle>',
-                '<circle cx="250" cy="180" r="1.5" fill="#FFD700" opacity="0.6">',
+                '<circle cx="700" cy="400" r="3" fill="#FFD700" opacity="0.6">',
                 '<animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite"/>',
                 '</circle>',
-                '<circle cx="180" cy="280" r="2.5" fill="#FFD700" opacity="0.7">',
+                '<circle cx="400" cy="600" r="5" fill="#FFD700" opacity="0.7">',
                 '<animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/>',
                 '</circle>',
                 '</g>'
             ));
         } else if (params.rarity == 4) { // Legendary
             return string(abi.encodePacked(
-                '<circle cx="200" cy="200" r="80" fill="none" stroke="#FFD700" stroke-width="1" opacity="0.3">',
-                '<animate attributeName="r" values="75;85;75" dur="4s" repeatCount="indefinite"/>',
+                '<circle cx="512" cy="512" r="200" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.3">',
+                '<animate attributeName="r" values="190;210;190" dur="4s" repeatCount="indefinite"/>',
                 '</circle>'
             ));
         }
@@ -298,13 +197,13 @@ library MonanimalSVGGenerator {
 
     function _generateStats(SVGParams memory params) internal pure returns (string memory) {
         return string(abi.encodePacked(
-            '<rect x="10" y="320" width="380" height="70" fill="#0E100F" fill-opacity="0.8" rx="5"/>',
-            '<text x="20" y="340" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="14" font-weight="bold">', params.name, '</text>',
-            '<text x="20" y="355" fill="#836EF9" font-family="Arial, sans-serif" font-size="10">Level ', params.level.toString(), ' | ', _getClassName(params.class), ' | ', _getRarityName(params.rarity), '</text>',
-            '<text x="20" y="370" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9">HP:', params.health.toString(), ' ATK:', params.attack.toString(), ' DEF:', params.defense.toString(), '</text>',
-            '<text x="20" y="382" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9">SPD:', params.speed.toString(), ' MAG:', params.magic.toString(), ' LCK:', params.luck.toString(), '</text>',
-            '<text x="280" y="370" fill="#A0055D" font-family="Arial, sans-serif" font-size="9">Wins: ', params.wins.toString(), '</text>',
-            '<text x="280" y="382" fill="#A0055D" font-family="Arial, sans-serif" font-size="9">Losses: ', params.losses.toString(), '</text>'
+            '<rect x="20" y="850" width="984" height="150" fill="#0E100F" fill-opacity="0.9" rx="10"/>',
+            '<text x="40" y="890" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="28" font-weight="bold">', params.name, '</text>',
+            '<text x="40" y="920" fill="#836EF9" font-family="Arial, sans-serif" font-size="20">Level ', params.level.toString(), ' | ', _getClassName(params.class), ' | ', _getRarityName(params.rarity), '</text>',
+            '<text x="40" y="950" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18">HP:', params.health.toString(), ' ATK:', params.attack.toString(), ' DEF:', params.defense.toString(), '</text>',
+            '<text x="40" y="980" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18">SPD:', params.speed.toString(), ' MAG:', params.magic.toString(), ' LCK:', params.luck.toString(), '</text>',
+            '<text x="700" y="950" fill="#A0055D" font-family="Arial, sans-serif" font-size="18">Wins: ', params.wins.toString(), '</text>',
+            '<text x="700" y="980" fill="#A0055D" font-family="Arial, sans-serif" font-size="18">Losses: ', params.losses.toString(), '</text>'
         ));
     }
 

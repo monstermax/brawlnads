@@ -1,0 +1,15 @@
+{
+  "network": {
+    "name": "monad_testnet",
+    "chainId": "10143"
+  },
+  "deployer": "0xCCF8BA457dCad7eE6A0361c96846a0f79744b113",
+  "deploymentTime": "2025-06-27T04:43:32.576Z",
+  "deployedContracts": [
+    "MonanimalNFT"
+  ],
+  "BattleArenaOptimized": "0x3D1fa27A0fe856188F5fC7D7b130b6a293eb0966",
+  "MonanimalNFT": "0xd78B4F19624c536eaa4cE587758e80D2E4C52C79",
+  "WeaponNFT": "0x58e1528552E6e83b8cB70933d78c1721954c9C23",
+  "ArtifactNFT": "0xd8ae03898442e37FF4438c5334aF2cDd087d9D5B"
+}

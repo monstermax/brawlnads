@@ -11,7 +11,7 @@ async function main() {
     console.log("Solde du compte:", ethers.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH");
 
     // Charger la configuration existante
-    const configPath = path.join(__dirname, "../frontend/src/config/contracts.json");
+    const configPath = path.join(__dirname, "../../frontend/src/config/contracts.json");
     let existingConfig;
     
     try {

@@ -44,6 +44,8 @@ const config: HardhatUserConfig = {
             accounts: [privateKey],
             chainId: 10143, // Chain ID Monad testnet
             gasPrice: "auto",
+            gas: 30000000, // 30M gas limit pour les contrats complexes
+            blockGasLimit: 30000000,
         },
         monad_mainnet: {
             url: process.env.MONAD_MAINNET_RPC || "https://rpc.monad.xyz",

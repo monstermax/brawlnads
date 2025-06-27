@@ -16,7 +16,7 @@ const FighterSelector: React.FC<FighterSelectorProps> = ({
       className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
       tabIndex={-1}
     >
-      <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
+      <div className="bg-gradient-to-br from-[#0E100F] via-[#200052] to-[#0E100F] border border-[#836EF9]/30 rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#836EF9]/20">
           <h2 className="gaming-title text-2xl">Select Your Fighter</h2>
@@ -33,7 +33,7 @@ const FighterSelector: React.FC<FighterSelectorProps> = ({
         </div>
         
         {/* Body */}
-        <div className="p-6 max-h-[60vh] overflow-y-auto">
+        <div className="p-6 flex-1 overflow-y-auto">
           {monanimals.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-400">
@@ -73,7 +73,7 @@ const FighterSelector: React.FC<FighterSelectorProps> = ({
         </div>
         
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-[#836EF9]/20 bg-black/20">
+        <div className="flex items-center justify-between p-6 border-t border-[#836EF9]/20 bg-black/20 flex-shrink-0">
           <div className="text-gray-400">
             {selectedFighter ? (
               <span>

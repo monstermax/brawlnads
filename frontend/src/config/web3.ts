@@ -16,7 +16,11 @@ export const monadTestnet = defineChain({
     },
     rpcUrls: {
         default: {
-            http: ['https://testnet-rpc.monad.xyz'],
+            http: [
+                //'https://testnet-rpc.monad.xyz',
+                //'https://monad-testnet.drpc.org',
+                'https://monad-testnet.g.alchemy.com/v2/FaZy3ZuKQL1DGYMmfVa8Wnle0rO1CkVO',
+            ],
         },
     },
     blockExplorers: {

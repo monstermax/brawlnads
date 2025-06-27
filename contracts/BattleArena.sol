@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+
 import "./MonanimalNFT.sol";
 import "./WeaponNFT.sol";
 import "./ArtifactNFT.sol";
+
 
 contract BattleArena is Ownable, ReentrancyGuard {
     using Counters for Counters.Counter;

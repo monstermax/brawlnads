@@ -42,10 +42,10 @@ export const config = createConfig({
 
 // Adresses des contrats déployés sur Monad Testnet
 export const CONTRACT_ADDRESSES = {
-    MonanimalNFT: '0x45df6a3644BD73c94207d53cf49d0Bae2fd0eFde',
-    WeaponNFT: '0xC10a2805C1610d81eA3037B041b6669CB4944251',
-    ArtifactNFT: '0xbe7E187734C30F11e7E7D3bc00D84F27CFD0e345',
-    BattleArena: '0xD6b48e9f3e7a3e233ECD3E1a493de5e9A764B80C',
+    MonanimalNFT: '0x283d26C980bA801D6b6d60261ED1978c88A51a53',
+    WeaponNFT: '0x4dDC57e24c47bcD964cb8fa237b25Ea0eC6fF54B',
+    ArtifactNFT: '0xa3265F9381d09896996d24c841206b730e2fa6d3',
+    BattleArena: '0xC21b1904850e47bF3E95D92C1Af7a162942d7b37',
 } as const;
 
 
@@ -271,13 +271,6 @@ export const BATTLE_ARENA_ABI = [
         "type": "function"
     },
     {
-        "inputs": [{ "internalType": "uint256[]", "name": "monanimalIds", "type": "uint256[]" }],
-        "name": "createTournament",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
         "inputs": [{ "internalType": "uint256", "name": "battleId", "type": "uint256" }],
         "name": "getBattle",
         "outputs": [
@@ -285,16 +278,30 @@ export const BATTLE_ARENA_ABI = [
                 "components": [
                     { "internalType": "uint256", "name": "battleId", "type": "uint256" },
                     { "internalType": "uint8", "name": "battleType", "type": "uint8" },
-                    { "internalType": "uint256[]", "name": "participants", "type": "uint256[]" },
-                    { "internalType": "address[]", "name": "players", "type": "address[]" },
+                    { "internalType": "uint256[2]", "name": "participants", "type": "uint256[2]" },
+                    { "internalType": "address[2]", "name": "players", "type": "address[2]" },
                     { "internalType": "uint8", "name": "state", "type": "uint8" },
                     { "internalType": "uint256", "name": "winner", "type": "uint256" },
-                    { "internalType": "uint256", "name": "prizePool", "type": "uint256" }
+                    { "internalType": "uint256", "name": "prizePool", "type": "uint256" },
+                    { "internalType": "uint32", "name": "timestamp", "type": "uint32" }
                 ],
-                "internalType": "struct BattleArena.Battle",
+                "internalType": "struct BattleArenaOptimized.Battle",
                 "name": "",
                 "type": "tuple"
             }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "battleId", "type": "uint256" }],
+        "name": "getBattleInfo",
+        "outputs": [
+            { "internalType": "uint256[2]", "name": "participants", "type": "uint256[2]" },
+            { "internalType": "address[2]", "name": "players", "type": "address[2]" },
+            { "internalType": "uint256", "name": "winner", "type": "uint256" },
+            { "internalType": "uint256", "name": "prizePool", "type": "uint256" },
+            { "internalType": "uint8", "name": "state", "type": "uint8" }
         ],
         "stateMutability": "view",
         "type": "function"

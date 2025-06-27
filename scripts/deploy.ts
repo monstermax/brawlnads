@@ -2,129 +2,176 @@ import { ethers } from "hardhat";
 import fs from "fs";
 import path from "path";
 
+// Parse deployment flags from environment variables
+const deployAll = process.env.DEPLOY_ALL === 'true';
+const shouldDeployBattleArena = process.env.DEPLOY_BATTLEARENA === 'true' || deployAll;
+const deployMonanimal = process.env.DEPLOY_MONANIMAL === 'true' || deployAll;
+const deployWeapon = process.env.DEPLOY_WEAPON === 'true' || deployAll;
+const deployArtifact = process.env.DEPLOY_ARTIFACT === 'true' || deployAll;
 
 async function main() {
-    console.log("🚀 Déploiement des contrats BrawlNads sur Monad...");
+    console.log("🚀 Déploiement sélectif des contrats BrawlNads...");
+    
+    // Afficher les flags actifs
+    console.log("📋 Flags de déploiement:");
+    console.log("  DEPLOY_ALL:", deployAll);
+    console.log("  DEPLOY_BATTLEARENA:", shouldDeployBattleArena);
+    console.log("  DEPLOY_MONANIMAL:", deployMonanimal);
+    console.log("  DEPLOY_WEAPON:", deployWeapon);
+    console.log("  DEPLOY_ARTIFACT:", deployArtifact);
 
     // Obtenir le déployeur
     const [deployer] = await ethers.getSigners();
-    console.log("Déploiement avec le compte:", deployer.address);
+    console.log("\nDéploiement avec le compte:", deployer.address);
     console.log("Solde du compte:", ethers.formatEther(await deployer.provider.getBalance(deployer.address)), "ETH");
 
+    const deployedContracts: Record<string, any> = {};
 
-    const deployedContracts = {}; // as Record<string, string>
+    // Charger la configuration existante si elle existe
+    let existingConfig: any = {};
+    const configPath = path.join(__dirname, "../frontend/src/config/contracts.json");
+    
+    try {
+        if (fs.existsSync(configPath)) {
+            existingConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            console.log("✅ Configuration existante chargée");
+        }
+    } catch (error) {
+        console.log("⚠️ Pas de configuration existante trouvée, création d'une nouvelle");
+    }
 
-    // TODO: load from existing json config
-    let arenaAddress = '';
-    let weaponAddress = '';
-    let artifactAddress = '';
-    let monanimalAddress = '';
+    // Adresses par défaut (depuis la config existante ou vides)
+    let arenaAddress = existingConfig.contracts?.BattleArena?.address || '';
+    let weaponAddress = existingConfig.contracts?.WeaponNFT?.address || '';
+    let artifactAddress = existingConfig.contracts?.ArtifactNFT?.address || '';
+    let monanimalAddress = existingConfig.contracts?.MonanimalNFT?.address || '';
 
-
-    if (true) {
-        // Déployer MonanimalNFT
+    // Déploiement conditionnel des contrats
+    if (deployMonanimal) {
+        console.log("\n🐾 Déploiement de MonanimalNFT...");
         deployedContracts['MonanimalNFT'] = await deployMonanimalNFT();
         monanimalAddress = deployedContracts['MonanimalNFT'].address;
+    } else if (monanimalAddress) {
+        console.log("📌 Utilisation de MonanimalNFT existant:", monanimalAddress);
     }
 
-    if (true) {
-        // Déployer WeaponNFT
+    if (deployWeapon) {
+        console.log("\n⚔️ Déploiement de WeaponNFT...");
         deployedContracts['WeaponNFT'] = await deployWeaponNFT();
         weaponAddress = deployedContracts['WeaponNFT'].address;
+    } else if (weaponAddress) {
+        console.log("📌 Utilisation de WeaponNFT existant:", weaponAddress);
     }
 
-    if (true) {
-        // Déployer ArtifactNFT
+    if (deployArtifact) {
+        console.log("\n🔮 Déploiement de ArtifactNFT...");
         deployedContracts['ArtifactNFT'] = await deployArtifactNFT();
         artifactAddress = deployedContracts['ArtifactNFT'].address;
+    } else if (artifactAddress) {
+        console.log("📌 Utilisation de ArtifactNFT existant:", artifactAddress);
     }
 
-
-    if (true) {
-        // Déployer BattleArena
-        deployedContracts['BattleArena'] = await deployBattleArena(monanimalAddress, weaponAddress, artifactAddress);
-        arenaAddress = deployedContracts['BattleArena'].address;
+    if (shouldDeployBattleArena) {
+        if (!monanimalAddress || !weaponAddress || !artifactAddress) {
+            console.error("❌ Impossible de déployer BattleArena sans les adresses des autres contrats");
+            console.log("💡 Utilisez --all pour déployer tous les contrats ou assurez-vous que les autres contrats existent");
+            process.exit(1);
+        }
+        
+        console.log("\n⚔️ Déploiement de BattleArenaOptimized...");
+        deployedContracts['BattleArenaOptimized'] = await deployBattleArena(monanimalAddress, weaponAddress, artifactAddress);
+        arenaAddress = deployedContracts['BattleArenaOptimized'].address;
+    } else if (arenaAddress) {
+        console.log("📌 Utilisation de BattleArena existant:", arenaAddress);
     }
 
-
-    if (deployedContracts['MonanimalNFT']) {
-        // Donner les permissions à BattleArena pour modifier les Monanimals
-        console.log("Configuration des permissions MonanimalNFT...");
-        await deployedContracts['MonanimalNFT'].contract.transferOwnership(arenaAddress);
-        console.log("✅ Ownership de MonanimalNFT transféré à BattleArena");
+    // Configuration des permissions (seulement si les contrats ont été redéployés)
+    if (deployedContracts['MonanimalNFT'] && arenaAddress) {
+        console.log("\n🔐 Configuration des permissions MonanimalNFT...");
+        try {
+            await deployedContracts['MonanimalNFT'].contract.transferOwnership(arenaAddress);
+            console.log("✅ Ownership de MonanimalNFT transféré à BattleArenaOptimized");
+        } catch (error) {
+            console.log("⚠️ Erreur lors du transfert d'ownership MonanimalNFT:", error);
+        }
     }
 
-    if (deployedContracts['WeaponNFT']) {
-        // Donner les permissions à BattleArena pour modifier les armes
-        console.log("Configuration des permissions WeaponNFT...");
-        await deployedContracts['WeaponNFT'].contract.transferOwnership(arenaAddress);
-        console.log("✅ Ownership de WeaponNFT transféré à BattleArena");
+    if (deployedContracts['WeaponNFT'] && arenaAddress) {
+        console.log("🔐 Configuration des permissions WeaponNFT...");
+        try {
+            await deployedContracts['WeaponNFT'].contract.transferOwnership(arenaAddress);
+            console.log("✅ Ownership de WeaponNFT transféré à BattleArenaOptimized");
+        } catch (error) {
+            console.log("⚠️ Erreur lors du transfert d'ownership WeaponNFT:", error);
+        }
     }
 
-    if (deployedContracts['ArtifactNFT']) {
-        // Donner les permissions à BattleArena pour modifier les artefacts
-        console.log("Configuration des permissions ArtifactNFT...");
-        await deployedContracts['ArtifactNFT'].contract.transferOwnership(arenaAddress);
-        console.log("✅ Ownership de ArtifactNFT transféré à BattleArena");
+    if (deployedContracts['ArtifactNFT'] && arenaAddress) {
+        console.log("🔐 Configuration des permissions ArtifactNFT...");
+        try {
+            await deployedContracts['ArtifactNFT'].contract.transferOwnership(arenaAddress);
+            console.log("✅ Ownership de ArtifactNFT transféré à BattleArenaOptimized");
+        } catch (error) {
+            console.log("⚠️ Erreur lors du transfert d'ownership ArtifactNFT:", error);
+        }
     }
 
-
-
+    // Résumé du déploiement
     console.log("\n📋 Résumé du déploiement:");
     console.log("================================");
-
-    if (deployedContracts['MonanimalNFT']) {
-        console.log("MonanimalNFT:", deployedContracts['MonanimalNFT'].address);
-    }
-    if (deployedContracts['WeaponNFT']) {
-        console.log("WeaponNFT:", deployedContracts['WeaponNFT'].address);
-    }
-    if (deployedContracts['ArtifactNFT']) {
-        console.log("ArtifactNFT:", deployedContracts['ArtifactNFT'].address);
-    }
-    if (deployedContracts['BattleArena']) {
-        console.log("BattleArena:", deployedContracts['BattleArena'].address);
+    
+    const contractsDeployed = Object.keys(deployedContracts);
+    if (contractsDeployed.length === 0) {
+        console.log("ℹ️ Aucun nouveau contrat déployé");
+    } else {
+        console.log("🆕 Nouveaux contrats déployés:");
+        contractsDeployed.forEach(name => {
+            console.log(`  ${name}: ${deployedContracts[name].address}`);
+        });
     }
 
-    console.log("Network:", (await ethers.provider.getNetwork()).name);
+    console.log("\n📍 Configuration finale:");
+    console.log("MonanimalNFT:", monanimalAddress || "❌ Non configuré");
+    console.log("WeaponNFT:", weaponAddress || "❌ Non configuré");
+    console.log("ArtifactNFT:", artifactAddress || "❌ Non configuré");
+    console.log("BattleArenaOptimized:", arenaAddress || "❌ Non configuré");
+
+    console.log("\nNetwork:", (await ethers.provider.getNetwork()).name);
     console.log("Chain ID:", (await ethers.provider.getNetwork()).chainId);
     console.log("Deployer:", deployer.address);
     console.log("================================");
 
+    // Sauvegarder seulement si des contrats ont été déployés
+    if (contractsDeployed.length > 0) {
+        const deploymentDir = path.join(__dirname, "../deployments");
+        if (!fs.existsSync(deploymentDir)) {
+            fs.mkdirSync(deploymentDir, { recursive: true });
+        }
 
-    // Sauvegarder dans un fichier
+        const networkName = (await ethers.provider.getNetwork()).name || "unknown";
+        const deploymentFile = path.join(deploymentDir, `${networkName}-${Date.now()}.json`);
 
-    const deploymentDir = path.join(__dirname, "../deployments");
-    if (!fs.existsSync(deploymentDir)) {
-        fs.mkdirSync(deploymentDir, { recursive: true });
+        const contractAddresses = {
+            network: await ethers.provider.getNetwork(),
+            deployer: deployer.address,
+            deploymentTime: new Date().toISOString(),
+            deployedContracts: contractsDeployed,
+            BattleArenaOptimized: arenaAddress,
+            MonanimalNFT: monanimalAddress,
+            WeaponNFT: weaponAddress,
+            ArtifactNFT: artifactAddress,
+        };
+
+        fs.writeFileSync(deploymentFile, JSON.stringify(contractAddresses, null, 2));
+        console.log(`\n💾 Adresses sauvegardées dans: ${deploymentFile}`);
     }
 
-    const networkName = (await ethers.provider.getNetwork()).name || "unknown";
-    const deploymentFile = path.join(deploymentDir, `${networkName}-${Date.now()}.json`);
-
-
-
-    const contractAddresses = {
-        network: await ethers.provider.getNetwork(),
-        deployer: deployer.address,
-        deploymentTime: new Date().toISOString(),
-        BattleArena: arenaAddress,
-        MonanimalNFT: monanimalAddress,
-        WeaponNFT: weaponAddress,
-        ArtifactNFT: artifactAddress,
-    };
-
-
-
-    fs.writeFileSync(deploymentFile, JSON.stringify(contractAddresses, null, 2));
-    console.log(`\n💾 Adresses sauvegardées dans: ${deploymentFile}`);
-
-    // Créer le fichier de configuration pour le frontend
+    // Mettre à jour la configuration frontend
     const frontendConfig = {
         contracts: {
             MonanimalNFT: {
                 address: monanimalAddress,
-                abi: "MonanimalNFT", // Le frontend devra importer l'ABI
+                abi: "MonanimalNFT",
             },
             WeaponNFT: {
                 address: weaponAddress,
@@ -136,11 +183,11 @@ async function main() {
             },
             BattleArena: {
                 address: arenaAddress,
-                abi: "BattleArena",
+                abi: "BattleArenaOptimized",
             },
         },
-        network: {
-            name: networkName,
+        network: existingConfig.network || {
+            name: (await ethers.provider.getNetwork()).name || "unknown",
             chainId: Number((await ethers.provider.getNetwork()).chainId),
             // @ts-ignore
             rpcUrl: ethers.provider.connection?.url || "http://localhost:8545"
@@ -155,17 +202,21 @@ async function main() {
     }
 
     fs.writeFileSync(frontendConfigFile, JSON.stringify(frontendConfig, null, 2));
-    console.log(`📱 Configuration frontend sauvegardée dans: ${frontendConfigFile}`);
+    console.log(`📱 Configuration frontend mise à jour: ${frontendConfigFile}`);
 
     console.log("\n🎉 Déploiement terminé avec succès!");
-    console.log("🎮 Vous pouvez maintenant utiliser BrawlNads!");
+    
+    if (contractsDeployed.length > 0) {
+        console.log("🎮 Nouveaux contrats prêts à utiliser!");
+    } else {
+        console.log("📋 Configuration mise à jour avec les contrats existants");
+    }
 
-    // Instructions pour les utilisateurs
-    console.log("\n📖 Instructions:");
-    console.log("1. Mint votre premier Monanimal avec MonanimalNFT.mint()");
-    console.log("2. Forgez des armes avec WeaponNFT.forge()");
-    console.log("3. Craftez des artefacts avec ArtifactNFT.craft()");
-    console.log("4. Équipez vos Monanimals et lancez des combats avec BattleArena!");
+    // Instructions d'utilisation
+    console.log("\n📖 Exemples d'utilisation:");
+    console.log("  DEPLOY_ALL=true npx hardhat run scripts/deploy.ts --network monad_testnet");
+    console.log("  DEPLOY_BATTLEARENA=true npx hardhat run scripts/deploy.ts --network monad_testnet");
+    console.log("  DEPLOY_MONANIMAL=true DEPLOY_WEAPON=true npx hardhat run scripts/deploy.ts --network monad_testnet");
 }
 
 
@@ -177,7 +228,7 @@ async function deployWeaponNFT() {
     await weaponNFT.waitForDeployment();
     const weaponAddress = await weaponNFT.getAddress();
     console.log("✅ WeaponNFT déployé à:", weaponAddress);
-    return { address: weaponAddress, contract: WeaponNFT };
+    return { address: weaponAddress, contract: weaponNFT };
 }
 
 
@@ -189,19 +240,19 @@ async function deployArtifactNFT() {
     await artifactNFT.waitForDeployment();
     const artifactAddress = await artifactNFT.getAddress();
     console.log("✅ ArtifactNFT déployé à:", artifactAddress);
-    return { address: artifactAddress, contract: ArtifactNFT };
+    return { address: artifactAddress, contract: artifactNFT };
 }
 
 
 async function deployBattleArena(monanimalAddress: string, weaponAddress: string, artifactAddress: string) {
-    // Déployer BattleArena
-    console.log("\n⚔️ Déploiement de BattleArena...");
-    const BattleArena = await ethers.getContractFactory("BattleArena");
-    const battleArena = await BattleArena.deploy(monanimalAddress, weaponAddress, artifactAddress);
+    // Déployer BattleArenaOptimized
+    console.log("\n⚔️ Déploiement de BattleArenaOptimized...");
+    const BattleArenaOptimized = await ethers.getContractFactory("BattleArenaOptimized");
+    const battleArena = await BattleArenaOptimized.deploy(monanimalAddress, weaponAddress, artifactAddress);
     await battleArena.waitForDeployment();
     const arenaAddress = await battleArena.getAddress();
-    console.log("✅ BattleArena déployé à:", arenaAddress);
-    return { address: arenaAddress, contract: BattleArena };
+    console.log("✅ BattleArenaOptimized déployé à:", arenaAddress);
+    return { address: arenaAddress, contract: battleArena };
 }
 
 
@@ -213,7 +264,7 @@ async function deployMonanimalNFT() {
     await monanimalNFT.waitForDeployment();
     const monanimalAddress = await monanimalNFT.getAddress();
     console.log("✅ MonanimalNFT déployé à:", monanimalAddress);
-    return { address: monanimalAddress, contract: MonanimalNFT };
+    return { address: monanimalAddress, contract: monanimalNFT };
 }
 
 

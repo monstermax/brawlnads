@@ -157,7 +157,7 @@ pnpm build
 ## 📊 Métriques de Qualité
 
 ### Code Quality
-- **Smart Contracts** : 100% Solidity 0.8.19
+- **Smart Contracts** : 100% Solidity 0.8.20
 - **Frontend** : TypeScript-ready, ESLint configuré
 - **Tests** : Structure de tests Hardhat
 - **Documentation** : README complet + guides

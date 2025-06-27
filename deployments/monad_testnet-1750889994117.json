@@ -3,6 +3,7 @@
   "WeaponNFT": "0xC10a2805C1610d81eA3037B041b6669CB4944251",
   "ArtifactNFT": "0xbe7E187734C30F11e7E7D3bc00D84F27CFD0e345",
   "BattleArena": "0xD6b48e9f3e7a3e233ECD3E1a493de5e9A764B80C",
+  "BattleArenaOptimized": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
   "network": {
     "name": "monad_testnet",
     "chainId": "10143"

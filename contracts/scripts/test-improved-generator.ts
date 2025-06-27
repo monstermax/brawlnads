@@ -56,7 +56,37 @@ async function main() {
             colorScheme: "default",
             wins: 0,
             losses: 0
-        }
+        },
+        {
+            name: "Assassin",
+            class: 1, // Assassin
+            rarity: 0, // Common
+            level: 1,
+            health: 50,
+            attack: 65,
+            defense: 45,
+            speed: 80,
+            magic: 30,
+            luck: 55,
+            colorScheme: "default",
+            wins: 0,
+            losses: 0
+        },
+        {
+            name: "Mage",
+            class: 2, // Mage
+            rarity: 0, // Common
+            level: 1,
+            health: 50,
+            attack: 65,
+            defense: 45,
+            speed: 80,
+            magic: 30,
+            luck: 55,
+            colorScheme: "default",
+            wins: 0,
+            losses: 0
+        },
     ];
 
     for (let i = 0; i < creatures.length; i++) {

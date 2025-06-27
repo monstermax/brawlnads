@@ -31,7 +31,7 @@ const FighterSelector: React.FC<FighterSelectorProps> = ({
             </svg>
           </button>
         </div>
-        
+
         {/* Body */}
         <div className="p-4 flex-1 overflow-y-auto">
           {monanimals.length === 0 ? (
@@ -53,6 +53,7 @@ const FighterSelector: React.FC<FighterSelectorProps> = ({
                     onSelect={monanimal.isKO ? undefined : onSelectFighter}
                     isSelected={selectedFighter?.id === monanimal.id}
                     showActions={false}
+                    disableImageModal={true}
                   />
                   {monanimal.isKO && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/80 rounded-xl pointer-events-none">

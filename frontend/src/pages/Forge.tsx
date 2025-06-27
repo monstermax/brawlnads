@@ -129,36 +129,6 @@ const Forge: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Additional Info */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-black/60 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6">
-                            <h3 className="text-xl font-bold text-purple-400 mb-3 font-mono">🎯 PLANNED FEATURES</h3>
-                            <ul className="text-gray-300 space-y-2 text-sm">
-                                <li>• Weapon crafting with rare materials</li>
-                                <li>• Artifact creation system</li>
-                                <li>• Equipment enhancement mechanics</li>
-                                <li>• Special forge events and challenges</li>
-                            </ul>
-                        </div>
-
-                        <div className="bg-black/60 backdrop-blur-md border border-yellow-500/30 rounded-2xl p-6">
-                            <h3 className="text-xl font-bold text-yellow-400 mb-3 font-mono">⏰ DEVELOPMENT STATUS</h3>
-                            <div className="space-y-3">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-300 text-sm">Design Phase</span>
-                                    <span className="text-green-400 text-sm">✅ Complete</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-300 text-sm">Smart Contracts</span>
-                                    <span className="text-yellow-400 text-sm">🔄 In Progress</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-300 text-sm">Frontend Integration</span>
-                                    <span className="text-gray-400 text-sm">⏳ Pending</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

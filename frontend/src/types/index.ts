@@ -141,6 +141,7 @@ export interface MonanimalCardProps {
   onSelect?: (monanimal: Monanimal) => void
   isSelected?: boolean
   showActions?: boolean
+  disableImageModal?: boolean
 }
 
 export interface FighterSelectorProps {

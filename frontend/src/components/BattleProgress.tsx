@@ -46,7 +46,7 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
               {monanimal.name || `Monanimal #${monanimal.id}`}
             </h3>
             <p className="text-gray-400 text-xs text-center">
-              Lvl {monanimal.level || 1} {monanimal.class || 'Fighter'}
+              Lvl {monanimal.level || 1} {/* monanimal.class || 'Fighter' */}
             </p>
             <div className="flex justify-center mt-1">
               {isWinner && (
@@ -61,7 +61,7 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
               )}
             </div>
           </div>
-          
+
           {/* NFT Image */}
           <div className="p-2">
             <div className={`
@@ -81,7 +81,7 @@ const BattleProgress: React.FC<BattleProgressProps> = ({
                   }}
                 />
               ) : null}
-              
+
               {/* Fallback content */}
               <div
                 className={`text-center ${isLoser ? 'text-gray-400' : 'text-white'} ${monanimal.image ? 'hidden' : 'block'}`}
